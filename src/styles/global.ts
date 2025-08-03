@@ -45,7 +45,7 @@ const globalStyles = css`
     text-decoration: none;
   }
 
-  button {
+  /* button {
     font-family: inherit;
     cursor: pointer;
     border: none;
@@ -58,7 +58,7 @@ const globalStyles = css`
 
   button:hover {
     background-color: #2b2b44;
-  }
+  } */
 
   input,
   textarea {

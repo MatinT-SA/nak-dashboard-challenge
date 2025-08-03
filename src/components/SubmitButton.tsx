@@ -11,6 +11,7 @@ const StyledButton = styled.button<{ disabled?: boolean }>`
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  transition: all.2s ease-in;
 
   svg {
     stroke: white;
