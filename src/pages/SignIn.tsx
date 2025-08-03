@@ -68,6 +68,12 @@ const StyledInput = styled.input`
   }
 `;
 
+const ErrorMessage = styled.p`
+  color: red;
+  font-weight: 600;
+  margin: 0 0 0.5rem 1rem;
+`;
+
 const Row = styled.div`
   display: flex;
   justify-content: space-between;
@@ -91,7 +97,7 @@ const SignUpBtn = styled.button`
   }
 `;
 
-const SubmitBtn = styled.button`
+const SubmitBtn = styled.button<{ disabled?: boolean }>`
   background-color: black;
   border: 2px solid black;
   border-radius: 10000px;
@@ -111,27 +117,38 @@ const SubmitBtn = styled.button`
   &:hover {
     background-color: white;
     border: 2px solid black;
+
     svg {
       stroke: black;
       fill: black;
     }
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
   }
 `;
 
 export default function SignIn() {
   const { t } = useTranslation();
   const login = useAuthStore((state) => state.login);
+  const error = useAuthStore((state) => state.error);
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<FormData>();
 
-  const onSubmit = (data: FormData) => {
-    login();
-    navigate("/");
+  const onSubmit = async (data: FormData) => {
+    await login(data.username, data.password);
+
+    if (useAuthStore.getState().isLoggedIn) {
+      navigate("/");
+    }
   };
 
   return (
@@ -142,19 +159,35 @@ export default function SignIn() {
         <InputsWrapper>
           <StyledInput
             placeholder={t("Username")}
-            {...register("username", { required: true })}
+            {...register("username", { required: t("Username is required") })}
           />
+          {errors.username && (
+            <ErrorMessage>{errors.username.message}</ErrorMessage>
+          )}
+
           <StyledInput
             type="password"
             placeholder={t("Password")}
-            {...register("password", { required: true })}
+            {...register("password", { required: t("Password is required") })}
           />
+          {errors.password && (
+            <ErrorMessage>{errors.password.message}</ErrorMessage>
+          )}
+
+          {/* Show API login error */}
+          {error && <ErrorMessage>{error}</ErrorMessage>}
         </InputsWrapper>
 
         <Row>
-          <SignUpBtn type="button">{t("Sign Up")}</SignUpBtn>
+          <SignUpBtn type="button" onClick={() => navigate("/signup")}>
+            {t("Sign Up")}
+          </SignUpBtn>
 
-          <SubmitBtn type="submit" aria-label="submit login">
+          <SubmitBtn
+            type="submit"
+            disabled={isSubmitting}
+            aria-label="submit login"
+          >
             <ArrowRightIcon />
           </SubmitBtn>
         </Row>
