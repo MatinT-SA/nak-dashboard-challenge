@@ -1,0 +1,93 @@
+import styled from "@emotion/styled";
+import ProfileIcon from "./icons/ProfileIcon";
+import AttributesIcon from "./icons/AttributesIcon";
+import ProductsIcon from "./icons/ProductsIcon";
+import LogoutIcon from "./icons/LogoutIcon";
+
+const SidebarWrapper = styled.aside`
+  width: 250px;
+  background-color: rgba(255, 255, 255, 0.4);
+  color: black;
+  padding: 1.5rem 1rem;
+  border: 1px solid white;
+  border-radius: 0 40px 40px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
+const TopSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 3rem;
+`;
+
+const Name = styled.p`
+  font-weight: 600;
+  margin-top: 1.5rem;
+`;
+
+const Nav = styled.nav`
+  margin-top: 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  opacity: 40%;
+`;
+
+const NavItem = styled.button`
+  background: none;
+  border: none;
+  font-size: 15px;
+  font-weight: 500;
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+const LogoutButton = styled.button`
+  background: none;
+  border: none;
+  font-size: 15px;
+  font-weight: 500;
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+const Sidebar = () => {
+  return (
+    <SidebarWrapper>
+      <div>
+        <TopSection>
+          <ProfileIcon size={50} />
+          <Name>Parnia Zandieh</Name>
+        </TopSection>
+
+        <Nav>
+          <NavItem>
+            <AttributesIcon style={{ marginRight: "0.5rem" }} />
+            Attributes
+          </NavItem>
+          <NavItem>
+            <ProductsIcon style={{ marginRight: "0.5rem" }} />
+            products
+          </NavItem>
+        </Nav>
+      </div>
+
+      <LogoutButton>
+        <LogoutIcon style={{ marginRight: "0.5rem" }} />
+        Logout
+      </LogoutButton>
+    </SidebarWrapper>
+  );
+};
+
+export default Sidebar;

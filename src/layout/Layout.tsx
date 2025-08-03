@@ -1,22 +1,10 @@
 import { Outlet } from "react-router-dom";
 import styled from "@emotion/styled";
-import ProfileIcon from "../components/icons/ProfileIcon";
+import Sidebar from "../components/Sidebar";
 
 const LayoutWrapper = styled.div`
   display: flex;
   min-height: 100vh;
-`;
-
-const Sidebar = styled.aside`
-  width: 250px;
-  background-color: rgba(255, 255, 255, 0.4);
-  color: black;
-  padding: 1rem;
-  border: 1px solid white;
-  border-radius: 0 40px 40px 0;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
 `;
 
 const MainContent = styled.main`
@@ -32,10 +20,7 @@ const MainContent = styled.main`
 const Layout = () => {
   return (
     <LayoutWrapper>
-      <Sidebar>
-        <ProfileIcon size={50} style={{ marginBottom: "1rem" }} />
-        <p>Sidebar</p>
-      </Sidebar>
+      <Sidebar />
       <MainContent>
         <Outlet />
       </MainContent>
