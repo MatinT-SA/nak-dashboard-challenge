@@ -8,8 +8,14 @@ import { useAuthStore } from "../store/authStore";
 
 import CircularCheckIcon from "../components/icons/CircularCheckIcon";
 import OutlinedButton from "../components/OutlinedButton";
-
 import SubmitButton from "../components/SubmitButton";
+import {
+  Title,
+  InputsWrapper,
+  StyledInput,
+  ErrorMessage,
+  Row,
+} from "../components/FormElements";
 
 interface FormData {
   firstName: string;
@@ -42,86 +48,6 @@ const Box = styled.form`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-`;
-
-const Title = styled.h2`
-  margin: 0;
-  font-size: 30px;
-  font-weight: 800;
-  text-align: left;
-  color: black;
-`;
-
-const InputsWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-`;
-
-const StyledInput = styled.input`
-  width: 100%;
-  padding: 1rem 2rem;
-  border-radius: 40px;
-  border: none;
-  font-size: 20px;
-  font-weight: 600;
-  background-color: rgba(0, 0, 0, 0.02);
-  color: black;
-  transition: border-color 0.2s;
-
-  &::placeholder {
-    color: rgba(0, 0, 0, 0.2);
-  }
-
-  &:focus {
-    border-color: #1e1e2f;
-    outline: none;
-  }
-`;
-
-const ErrorMessage = styled.p`
-  color: red;
-  font-weight: 600;
-  margin: 0 0 0.5rem 1rem;
-`;
-
-const Row = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const SubmitBtn = styled.button<{ disabled?: boolean }>`
-  background-color: black;
-  border: 2px solid black;
-  border-radius: 10000px;
-  padding: 0.5rem 3rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-
-  svg {
-    stroke: white;
-    fill: white;
-    width: 20px;
-    height: 20px;
-  }
-
-  &:hover {
-    background-color: white;
-    border: 2px solid black;
-
-    svg {
-      stroke: black;
-      fill: black;
-    }
-  }
-
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.6;
-  }
 `;
 
 export default function SignUp() {

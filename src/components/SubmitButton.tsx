@@ -1,4 +1,3 @@
-// src/components/common/SubmitButton.tsx
 import styled from "@emotion/styled";
 import type { ButtonHTMLAttributes } from "react";
 import ArrowRightIcon from "../components/icons/ArrowRightIcon";
