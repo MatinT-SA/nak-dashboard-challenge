@@ -66,7 +66,6 @@ export default function SignUp() {
     formState: { errors, isSubmitting },
   } = useForm<FormData>();
 
-  // Watch password to validate confirmPassword
   const password = watch("password", "");
 
   const onSubmit = async (data: FormData) => {

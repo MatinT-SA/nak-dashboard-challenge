@@ -37,8 +37,9 @@ export const StyledInput = styled.input`
 
 export const ErrorMessage = styled.p`
   color: red;
+  font-size: 12px;
   font-weight: 600;
-  margin: 0 0 0.5rem 1rem;
+  margin: 0 0 0.2rem 1rem;
 `;
 
 export const Row = styled.div`
