@@ -47,6 +47,12 @@ const NavItem = styled.button`
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  padding: 0.5rem 1rem;
+
+  :hover {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
 `;
 
 const LogoutButton = styled.button`
@@ -59,6 +65,12 @@ const LogoutButton = styled.button`
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  padding: 0.5rem 1rem;
+
+  :hover {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
 `;
 
 const Sidebar = () => {
