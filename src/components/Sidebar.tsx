@@ -3,6 +3,7 @@ import ProfileIcon from "./icons/ProfileIcon";
 import AttributesIcon from "./icons/AttributesIcon";
 import ProductsIcon from "./icons/ProductsIcon";
 import LogoutIcon from "./icons/LogoutIcon";
+import { useAuthStore } from "../store/authStore";
 
 const SidebarWrapper = styled.aside`
   width: 250px;
@@ -74,6 +75,8 @@ const LogoutButton = styled.button`
 `;
 
 const Sidebar = () => {
+  const logout = useAuthStore((state) => state.logout);
+
   return (
     <SidebarWrapper>
       <div>
@@ -94,7 +97,7 @@ const Sidebar = () => {
         </Nav>
       </div>
 
-      <LogoutButton>
+      <LogoutButton onClick={() => logout()}>
         <LogoutIcon style={{ marginRight: "0.5rem" }} />
         Logout
       </LogoutButton>
