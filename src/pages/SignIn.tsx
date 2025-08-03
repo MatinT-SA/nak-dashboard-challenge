@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
 
 import ArrowRightIcon from "../components/icons/ArrowRightIcon";
+import OutlinedButton from "../components/OutlinedButton";
 
 interface FormData {
   username: string;
@@ -21,12 +22,16 @@ const Container = styled.div`
 `;
 
 const Box = styled.form`
+  width: 90%;
+  max-width: 500px;
+
+  height: auto;
+  aspect-ratio: 500 / 400;
+
   background-color: rgba(255, 255, 255, 0.4);
   padding: 2rem;
   border-radius: 40px;
   border: 1px solid white;
-  width: 700px;
-  height: 456px;
 
   display: flex;
   flex-direction: column;
@@ -78,23 +83,6 @@ const Row = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-`;
-
-const SignUpBtn = styled.button`
-  background: transparent;
-  border: 1px solid black;
-  color: black;
-  font-size: 20px;
-  font-weight: 600;
-  padding: 0.5rem 1.5rem;
-  border-radius: 10000px;
-  cursor: pointer;
-  transition: 0.2s ease-in;
-
-  &:hover {
-    background-color: black;
-    color: white;
-  }
 `;
 
 const SubmitBtn = styled.button<{ disabled?: boolean }>`
@@ -179,9 +167,9 @@ export default function SignIn() {
         </InputsWrapper>
 
         <Row>
-          <SignUpBtn type="button" onClick={() => navigate("/signup")}>
+          <OutlinedButton type="button" onClick={() => navigate("/signup")}>
             {t("Sign Up")}
-          </SignUpBtn>
+          </OutlinedButton>
 
           <SubmitBtn
             type="submit"
