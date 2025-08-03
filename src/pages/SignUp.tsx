@@ -6,9 +6,10 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
 
-import ArrowRightIcon from "../components/icons/ArrowRightIcon";
 import CircularCheckIcon from "../components/icons/CircularCheckIcon";
 import OutlinedButton from "../components/OutlinedButton";
+
+import SubmitButton from "../components/SubmitButton";
 
 interface FormData {
   firstName: string;
@@ -269,13 +270,11 @@ export default function SignUp() {
             {t("Sign In")}
           </OutlinedButton>
 
-          <SubmitBtn
+          <SubmitButton
             type="submit"
             disabled={isSubmitting}
             aria-label="submit signup"
-          >
-            <ArrowRightIcon />
-          </SubmitBtn>
+          />
         </Row>
       </Box>
     </Container>

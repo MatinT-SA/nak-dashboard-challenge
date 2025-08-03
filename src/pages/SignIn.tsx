@@ -8,6 +8,8 @@ import { useAuthStore } from "../store/authStore";
 import ArrowRightIcon from "../components/icons/ArrowRightIcon";
 import OutlinedButton from "../components/OutlinedButton";
 
+import SubmitButton from "../components/SubmitButton";
+
 interface FormData {
   username: string;
   password: string;
@@ -171,13 +173,11 @@ export default function SignIn() {
             {t("Sign Up")}
           </OutlinedButton>
 
-          <SubmitBtn
+          <SubmitButton
             type="submit"
             disabled={isSubmitting}
-            aria-label="submit login"
-          >
-            <ArrowRightIcon />
-          </SubmitBtn>
+            aria-label="submit signin"
+          />
         </Row>
       </Box>
     </Container>
