@@ -1,13 +1,16 @@
+/** @jsxImportSource @emotion/react */
+import styled from "@emotion/styled";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
-import styled from "@emotion/styled";
-import { useTranslation } from "react-i18next";
 
-type SignInForm = {
+import ArrowRightIcon from "../components/icons/ArrowRightIcon";
+
+interface FormData {
   username: string;
   password: string;
-};
+}
 
 const Container = styled.div`
   display: flex;
@@ -18,29 +21,46 @@ const Container = styled.div`
 `;
 
 const Box = styled.form`
-  background-color: background-color: #FAFAFA;;
+  background-color: rgba(255, 255, 255, 0.4);
   padding: 2rem;
   border-radius: 40px;
-  width: 100%;
-  max-width: 400px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  border: 1px solid white;
+  width: 700px;
+  height: 456px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 const Title = styled.h2`
-  margin: 0 0 1.5rem 0;
-  font-size: 1.5rem;
+  margin: 1rem 0;
+  font-size: 30px;
+  font-weight: 800;
   text-align: left;
-  color: #222;
+  color: black;
+`;
+
+const InputsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 `;
 
 const StyledInput = styled.input`
   width: 100%;
-  padding: 0.75rem 1rem;
-  margin-bottom: 1rem;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 1rem;
+  padding: 1rem 2rem;
+  border-radius: 40px;
+  border: none;
+  font-size: 20px;
+  font-weight: 600;
+  background-color: rgba(0, 0, 0, 0.02);
+  color: black;
   transition: border-color 0.2s;
+
+  &::placeholder {
+    color: rgba(0, 0, 0, 0.2);
+  }
 
   &:focus {
     border-color: #1e1e2f;
@@ -56,34 +76,45 @@ const Row = styled.div`
 
 const SignUpBtn = styled.button`
   background: transparent;
-  border: 1px solid transparent;
-  color: #222;
-  font-size: 0.9rem;
-  padding: 0.5rem 0.9rem;
-  border-radius: 50%;
-  transition: background 0.2s, color 0.2s;
+  border: 1px solid black;
+  color: black;
+  font-size: 20px;
+  font-weight: 600;
+  padding: 0.5rem 1.5rem;
+  border-radius: 10000px;
+  cursor: pointer;
+  transition: 0.2s ease-in;
 
   &:hover {
-    background-color: #f0f0f0;
-    color: #000;
+    background-color: black;
+    color: white;
   }
 `;
 
 const SubmitBtn = styled.button`
-  background-color: #1e1e2f;
-  border: none;
-  border-radius: 50%;
-  padding: 0.6rem;
+  background-color: black;
+  border: 2px solid black;
+  border-radius: 10000px;
+  padding: 0.5rem 3rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 
   svg {
     stroke: white;
+    fill: white;
+    width: 20px;
+    height: 20px;
   }
 
   &:hover {
-    background-color: #2b2b44;
+    background-color: white;
+    border: 2px solid black;
+    svg {
+      stroke: black;
+      fill: black;
+    }
   }
 `;
 
@@ -92,9 +123,13 @@ export default function SignIn() {
   const login = useAuthStore((state) => state.login);
   const navigate = useNavigate();
 
-  const { register, handleSubmit } = useForm<SignInForm>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>();
 
-  const onSubmit = () => {
+  const onSubmit = (data: FormData) => {
     login();
     navigate("/");
   };
@@ -102,45 +137,25 @@ export default function SignIn() {
   return (
     <Container>
       <Box onSubmit={handleSubmit(onSubmit)}>
-        <Title>{t("signIn")}</Title>
+        <Title>{t("Sign In")}</Title>
 
-        <StyledInput
-          placeholder={t("username")}
-          {...register("username", { required: true })}
-        />
-        <StyledInput
-          placeholder={t("password")}
-          type="password"
-          {...register("password", { required: true })}
-        />
+        <InputsWrapper>
+          <StyledInput
+            placeholder={t("Username")}
+            {...register("username", { required: true })}
+          />
+          <StyledInput
+            type="password"
+            placeholder={t("Password")}
+            {...register("password", { required: true })}
+          />
+        </InputsWrapper>
 
         <Row>
-          <SignUpBtn type="button" onClick={() => navigate("/signup")}>
-            {t("signUp")}
-          </SignUpBtn>
+          <SignUpBtn type="button">{t("Sign Up")}</SignUpBtn>
 
-          <SubmitBtn type="submit">
-            {/* Replace this with your actual SVG */}
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M5 12H19"
-                stroke="white"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-              <path
-                d="M12 5L19 12L12 19"
-                stroke="white"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            </svg>
+          <SubmitBtn type="submit" aria-label="submit login">
+            <ArrowRightIcon />
           </SubmitBtn>
         </Row>
       </Box>
