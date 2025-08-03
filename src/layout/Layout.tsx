@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom";
 import styled from "@emotion/styled";
+import ProfileIcon from "../components/icons/ProfileIcon";
 
 const LayoutWrapper = styled.div`
   display: flex;
@@ -8,22 +9,31 @@ const LayoutWrapper = styled.div`
 
 const Sidebar = styled.aside`
   width: 250px;
-  background-color: #1e1e2f;
-  color: #fff;
+  background-color: rgba(255, 255, 255, 0.4);
+  color: black;
   padding: 1rem;
+  border: 1px solid white;
+  border-radius: 0 40px 40px 0;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 `;
 
 const MainContent = styled.main`
   flex: 1;
   padding: 2rem;
-  background-color: #f9f9f9;
+  background: linear-gradient(
+    to bottom,
+    var(--color-background-light-1),
+    var(--color-background-light-2)
+  );
 `;
 
 const Layout = () => {
   return (
     <LayoutWrapper>
       <Sidebar>
-        {/* Replace with nav links later */}
+        <ProfileIcon size={50} style={{ marginBottom: "1rem" }} />
         <p>Sidebar</p>
       </Sidebar>
       <MainContent>

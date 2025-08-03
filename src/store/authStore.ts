@@ -5,6 +5,12 @@ interface AuthState {
   isLoggedIn: boolean;
   error: string | null;
   login: (userName: string, password: string) => Promise<void>;
+  register: (
+    firstName: string,
+    lastName: string,
+    userName: string,
+    password: string
+  ) => Promise<void>;
   logout: () => void;
 }
 
@@ -13,13 +19,13 @@ export const useAuthStore = create<AuthState>((set) => ({
   isLoggedIn: !!localStorage.getItem("token"),
   error: null,
 
-  login: async (username, password) => {
+  login: async (userName, password) => {
     try {
-      set({ error: null }); // clear previous error
+      set({ error: null });
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userName: username, password }),
+        body: JSON.stringify({ userName, password }),
       });
 
       if (!res.ok) {
@@ -34,6 +40,44 @@ export const useAuthStore = create<AuthState>((set) => ({
       set({ token, isLoggedIn: true, error: null });
     } catch (error: any) {
       set({ error: error.message || "Login failed" });
+    }
+  },
+
+  register: async (firstName, lastName, userName, password) => {
+    try {
+      set({ error: null });
+
+      const fullUrl = "/api/users/register";
+      console.log("1. Full request URL:", fullUrl);
+
+      // Changed userName to username here
+      const body = JSON.stringify({
+        firstName,
+        lastName,
+        userName,
+        password,
+      });
+      console.log("2. Request body:", body);
+
+      const res = await fetch(fullUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body,
+      });
+
+      console.log("3. Status code:", res.status);
+
+      const rawText = await res.text(); // Use text to avoid JSON parse crash
+      console.log("4. Raw response text:", rawText);
+
+      if (!res.ok) {
+        throw new Error(rawText || "Registration failed");
+      }
+
+      set({ error: null });
+    } catch (error: any) {
+      console.log("5. Caught error:", error.message);
+      set({ error: error.message || "Registration failed" });
     }
   },
 

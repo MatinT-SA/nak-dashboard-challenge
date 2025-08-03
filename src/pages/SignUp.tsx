@@ -20,7 +20,7 @@ import {
 interface FormData {
   firstName: string;
   lastName: string;
-  username: string;
+  userName: string;
   password: string;
   confirmPassword: string;
 }
@@ -51,13 +51,14 @@ const Box = styled.form`
 `;
 
 export default function SignUp() {
-  const [usernameValue, setUsernameValue] = useState("");
-  const [isUsernameValid, setIsUsernameValid] = useState(false);
+  // const [isUsernameValid, setIsUsernameValid] = useState(false);
 
   const { t } = useTranslation();
   const navigate = useNavigate();
+
+  // Get register and login actions from Zustand store
+  const registerUser = useAuthStore((state) => state.register);
   const login = useAuthStore((state) => state.login);
-  const error = useAuthStore((state) => state.error);
 
   const {
     register,
@@ -67,45 +68,39 @@ export default function SignUp() {
   } = useForm<FormData>();
 
   const password = watch("password", "");
+  const usernameValue = watch("userName", "");
+  const isUsernameValid = usernameValue.length >= 4;
 
   const onSubmit = async (data: FormData) => {
     try {
-      // call your signup API here
-      const response = await fetch("/users/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          firstName: data.firstName,
-          lastName: data.lastName,
-          userName: data.username,
-          password: data.password,
-        }),
-      });
+      // Use Zustand register function (not fetch here)
+      await registerUser(
+        data.firstName,
+        data.lastName,
+        data.userName,
+        data.password
+      );
 
-      if (response.status === 201) {
-        // After successful signup, automatically login or navigate to signin
-        await login(data.username, data.password);
-        if (useAuthStore.getState().isLoggedIn) {
-          navigate("/");
-        }
-      } else {
-        const resData = await response.json();
-        throw new Error(resData.message || t("Sign up failed"));
+      // Then login and navigate
+      await login(data.userName, data.password);
+
+      if (useAuthStore.getState().isLoggedIn) {
+        navigate("/");
       }
     } catch (err: any) {
-      alert(err.message); // You can handle better with toast or error display state
+      alert(err.message || t("Sign up failed"));
     }
   };
 
-  const validateUsername = (value: string) => {
-    setIsUsernameValid(value.length >= 4);
-  };
+  // const validateUsername = (value: string) => {
+  //   setIsUsernameValid(value.length >= 4);
+  // };
 
-  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
-    setUsernameValue(val);
-    validateUsername(val);
-  };
+  // const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const val = e.target.value;
+  //   setUsernameValue(val);
+  //   validateUsername(val);
+  // };
 
   return (
     <Container>
@@ -141,16 +136,20 @@ export default function SignUp() {
           >
             <StyledInput
               placeholder={t("Username")}
-              {...register("username", { required: t("Username is required") })}
-              value={usernameValue}
-              onChange={handleUsernameChange}
-              css={{ paddingRight: 40 }} // extra right padding for icon space
+              {...register("userName", {
+                required: t("Username is required"),
+                minLength: {
+                  value: 4,
+                  message: t("Username must be at least 4 characters"),
+                },
+              })}
+              css={{ paddingRight: 40 }} // for icon space
             />
             <div
               css={{
                 position: "absolute",
                 right: 12,
-                pointerEvents: "none", // so icon doesn't block clicks
+                pointerEvents: "none",
               }}
               aria-hidden="true"
             >
@@ -160,6 +159,9 @@ export default function SignUp() {
               />
             </div>
           </div>
+          {errors.userName && (
+            <ErrorMessage>{errors.userName.message}</ErrorMessage>
+          )}
 
           <StyledInput
             type="password"
