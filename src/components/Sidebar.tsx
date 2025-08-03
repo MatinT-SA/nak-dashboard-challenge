@@ -4,6 +4,7 @@ import AttributesIcon from "./icons/AttributesIcon";
 import ProductsIcon from "./icons/ProductsIcon";
 import LogoutIcon from "./icons/LogoutIcon";
 import { useAuthStore } from "../store/authStore";
+import { useNavigate } from "react-router-dom";
 
 const SidebarWrapper = styled.aside`
   width: 250px;
@@ -76,6 +77,7 @@ const LogoutButton = styled.button`
 
 const Sidebar = () => {
   const logout = useAuthStore((state) => state.logout);
+  const navigate = useNavigate();
 
   return (
     <SidebarWrapper>
@@ -86,11 +88,11 @@ const Sidebar = () => {
         </TopSection>
 
         <Nav>
-          <NavItem>
+          <NavItem onClick={() => navigate("/attributes")}>
             <AttributesIcon style={{ marginRight: "0.5rem" }} />
             Attributes
           </NavItem>
-          <NavItem>
+          <NavItem onClick={() => navigate("/products")}>
             <ProductsIcon style={{ marginRight: "0.5rem" }} />
             products
           </NavItem>
