@@ -4,7 +4,7 @@ import AttributesIcon from "./icons/AttributesIcon";
 import ProductsIcon from "./icons/ProductsIcon";
 import LogoutIcon from "./icons/LogoutIcon";
 import { useAuthStore } from "../store/authStore";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const SidebarWrapper = styled.aside`
   width: 250px;
@@ -38,8 +38,8 @@ const Nav = styled.nav`
   opacity: 40%;
 `;
 
-const NavItem = styled.button`
-  background: none;
+const NavItem = styled.button<{ active?: boolean }>`
+  background: ${(props) => (props.active ? "rgba(0, 0, 0, 0.2)" : "none")};
   border: none;
   font-size: 15px;
   font-weight: 500;
@@ -50,10 +50,10 @@ const NavItem = styled.button`
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
+  border-radius: 8px;
 
   :hover {
     background: rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
   }
 `;
 
@@ -79,6 +79,9 @@ const Sidebar = () => {
   const logout = useAuthStore((state) => state.logout);
   const navigate = useNavigate();
 
+  const location = useLocation();
+  const currentPath = location.pathname;
+
   const firstName = useAuthStore((state) => state.firstName);
   const lastName = useAuthStore((state) => state.lastName);
   const username = useAuthStore((state) => state.username);
@@ -96,11 +99,18 @@ const Sidebar = () => {
         </TopSection>
 
         <Nav>
-          <NavItem onClick={() => navigate("/attributes")}>
+          <NavItem
+            active={currentPath === "/attributes"}
+            onClick={() => navigate("/attributes")}
+          >
             <AttributesIcon style={{ marginRight: "0.5rem" }} />
             Attributes
           </NavItem>
-          <NavItem onClick={() => navigate("/products")}>
+
+          <NavItem
+            active={currentPath === "/products"}
+            onClick={() => navigate("/products")}
+          >
             <ProductsIcon style={{ marginRight: "0.5rem" }} />
             Products
           </NavItem>

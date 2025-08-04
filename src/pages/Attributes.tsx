@@ -15,6 +15,11 @@ import {
 } from "../components/Table";
 import { useAttributesStore } from "../store/attributesStore";
 
+interface Field {
+  name: string;
+  value: string;
+}
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -78,6 +83,7 @@ export default function Attributes() {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors },
   } = useForm<AttributeFormData>();
 
@@ -85,13 +91,25 @@ export default function Attributes() {
     fetchAttributes();
   }, []);
 
-  const onSubmit = async (data: AttributeFormData) => {
-    await createAttribute(data);
+  const onCancel = () => {
     setIsFormActive(false);
     reset();
   };
 
-  const onCancel = () => {
+  const onSubmit = async (fields: Field[]) => {
+    if (fields.length === 0) return;
+
+    const name = fields[0].name;
+    const values = fields
+      .filter((f) => f.value.trim() !== "")
+      .map((f) => f.value);
+
+    if (!name || values.length === 0) {
+      // handle validation error here (optional)
+      return;
+    }
+
+    await createAttribute({ name, values });
     setIsFormActive(false);
     reset();
   };
@@ -140,10 +158,6 @@ export default function Attributes() {
                 <TableRow key={attribute.id}>
                   <TableCell align="center">{index + 1}</TableCell>
                   <TableCell>{attribute.name}</TableCell>
-                  <TableCell>
-                    {attribute.type.charAt(0).toUpperCase() +
-                      attribute.type.slice(1)}
-                  </TableCell>
                 </TableRow>
               ))
             )}
@@ -157,7 +171,13 @@ export default function Attributes() {
           style={{ display: "flex", flexDirection: "column", height: "100%" }}
         >
           <Content>
-            <DynamicForm register={register} errors={errors} />
+            <DynamicForm
+              onCancel={onCancel}
+              onSave={onSubmit}
+              register={register}
+              control={control}
+              errors={errors}
+            />
           </Content>
           <BottomBar>
             <PrimaryButton
