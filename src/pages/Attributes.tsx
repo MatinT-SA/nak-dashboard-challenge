@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { PrimaryButton } from "../components/Button";
@@ -29,7 +29,7 @@ const Container = styled.div`
 
 const Content = styled.div`
   flex: 1 1 auto;
-  overflow-y: auto; /* scroll if needed */
+  overflow-y: auto;
 `;
 
 const Header = styled.div`
@@ -63,8 +63,14 @@ interface AttributeFormData {
 
 export default function Attributes() {
   const { t } = useTranslation();
-  const { attributes, addAttribute, updateAttribute, deleteAttribute } =
-    useAttributesStore();
+  const {
+    attributes,
+    isLoading,
+    error,
+    fetchAttributes,
+    createAttribute,
+    clearError,
+  } = useAttributesStore();
 
   const [isFormActive, setIsFormActive] = useState(false);
 
@@ -75,8 +81,12 @@ export default function Attributes() {
     formState: { errors },
   } = useForm<AttributeFormData>();
 
-  const onSubmit = (data: AttributeFormData) => {
-    addAttribute(data);
+  useEffect(() => {
+    fetchAttributes();
+  }, []);
+
+  const onSubmit = async (data: AttributeFormData) => {
+    await createAttribute(data);
     setIsFormActive(false);
     reset();
   };
@@ -110,7 +120,13 @@ export default function Attributes() {
             <TableHeaderCell>{t("pages.attributes.values")}</TableHeaderCell>
           </TableHeader>
           <TableBody>
-            {attributes.length === 0 ? (
+            {isLoading ? (
+              <TableRow>
+                <TableCell align="center" style={{ gridColumn: "1 / -1" }}>
+                  Loading...
+                </TableCell>
+              </TableRow>
+            ) : attributes.length === 0 ? (
               <TableRow>
                 <TableCell
                   align="center"

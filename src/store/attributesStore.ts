@@ -14,82 +14,65 @@ interface AttributesState {
   attributes: Attribute[];
   isLoading: boolean;
   error: string | null;
-  addAttribute: (
+  fetchAttributes: () => Promise<void>;
+  fetchAttributeById: (id: string) => Promise<Attribute | null>;
+  createAttribute: (
     attribute: Omit<Attribute, "id" | "createdAt" | "updatedAt">
-  ) => void;
-  updateAttribute: (
-    id: string,
-    updates: Partial<Omit<Attribute, "id" | "createdAt" | "updatedAt">>
-  ) => void;
-  deleteAttribute: (id: string) => void;
-  getAttributeById: (id: string) => Attribute | undefined;
+  ) => Promise<void>;
   clearError: () => void;
 }
 
 export const useAttributesStore = create<AttributesState>()(
   persist(
     (set, get) => ({
-      attributes: [
-        {
-          id: "1",
-          name: "Color",
-          type: "select",
-          values: ["Red", "Blue", "Green", "Yellow"],
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          id: "2",
-          name: "Size",
-          type: "select",
-          values: ["XS", "S", "M", "L", "XL"],
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          id: "3",
-          name: "Weight",
-          type: "number",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-      ],
+      attributes: [],
       isLoading: false,
       error: null,
 
-      addAttribute: (attribute) => {
-        const newAttribute: Attribute = {
-          ...attribute,
-          id: Date.now().toString(),
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        };
-        set((state) => ({
-          attributes: [...state.attributes, newAttribute],
-          error: null,
-        }));
+      fetchAttributes: async () => {
+        set({ isLoading: true });
+        try {
+          const res = await fetch("/api/attributes");
+          if (!res.ok) throw new Error("Failed to fetch attributes");
+          const data = await res.json();
+          set({ attributes: data, isLoading: false });
+        } catch (err: any) {
+          set({ error: err.message || "Unknown error", isLoading: false });
+        }
       },
 
-      updateAttribute: (id, updates) => {
-        set((state) => ({
-          attributes: state.attributes.map((attr) =>
-            attr.id === id
-              ? { ...attr, ...updates, updatedAt: new Date() }
-              : attr
-          ),
-          error: null,
-        }));
+      fetchAttributeById: async (id: string) => {
+        try {
+          const res = await fetch(`/api/attributes/${id}`);
+          if (!res.ok) throw new Error("Failed to fetch attribute");
+          const data = await res.json();
+          return data;
+        } catch (err: any) {
+          set({ error: err.message || "Unknown error" });
+          return null;
+        }
       },
 
-      deleteAttribute: (id) => {
-        set((state) => ({
-          attributes: state.attributes.filter((attr) => attr.id !== id),
-          error: null,
-        }));
-      },
+      createAttribute: async (attribute) => {
+        try {
+          const res = await fetch("/api/attributes", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(attribute),
+          });
 
-      getAttributeById: (id) => {
-        return get().attributes.find((attr) => attr.id === id);
+          if (!res.ok) throw new Error("Failed to create attribute");
+
+          const newAttr = await res.json();
+          set((state) => ({
+            attributes: [...state.attributes, newAttr],
+            error: null,
+          }));
+        } catch (err: any) {
+          set({ error: err.message || "Unknown error" });
+        }
       },
 
       clearError: () => {

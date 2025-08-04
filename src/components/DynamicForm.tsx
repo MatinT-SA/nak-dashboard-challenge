@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import type { ChangeEvent, FormEvent } from "react";
 import styled from "@emotion/styled";
+import type { ChangeEvent, FormEvent } from "react";
+import React, { useState } from "react";
 import { PlusIcon } from "./icons/PlusIcon";
 
 import type { Control, FieldErrors, UseFormRegister } from "react-hook-form";
@@ -30,7 +30,7 @@ const Form = styled.form`
 const Row = styled.div`
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 3rem;
   margin-bottom: 1.2rem;
 `;
 
@@ -83,39 +83,6 @@ const PlusButton = styled.button`
   align-items: center;
   cursor: pointer;
   flex-shrink: 0;
-
-  &:hover {
-    background-color: #0056b3;
-  }
-`;
-
-const ButtonsRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-top: 2rem;
-`;
-
-const CancelButton = styled.button`
-  background-color: #eee;
-  border: none;
-  padding: 10px 30px;
-  border-radius: 40px;
-  cursor: pointer;
-  font-weight: 600;
-
-  &:hover {
-    background-color: #ccc;
-  }
-`;
-
-const SaveButton = styled.button`
-  background-color: #007bff;
-  border: none;
-  padding: 10px 30px;
-  border-radius: 40px;
-  color: white;
-  cursor: pointer;
-  font-weight: 600;
 
   &:hover {
     background-color: #0056b3;
@@ -203,7 +170,6 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
               />
             </InputWrapper>
 
-            {/* Plus button only on rows after first, and only on last row */}
             {!isFirstRow && isLastRow && (
               <PlusButton
                 type="button"
@@ -216,13 +182,6 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
           </Row>
         );
       })}
-
-      <ButtonsRow>
-        <CancelButton type="button" onClick={onCancel}>
-          Cancel
-        </CancelButton>
-        <SaveButton type="submit">Save</SaveButton>
-      </ButtonsRow>
     </Form>
   );
 };
