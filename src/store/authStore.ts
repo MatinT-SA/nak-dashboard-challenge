@@ -5,6 +5,7 @@ interface AuthState {
   isLoggedIn: boolean;
   error: string | null;
   firstName: string | null;
+  lastName: string | null;
   username: string | null;
   login: (userName: string, password: string) => Promise<void>;
   register: (
@@ -21,6 +22,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   isLoggedIn: !!localStorage.getItem("token"),
   error: null,
   firstName: localStorage.getItem("firstName"),
+  lastName: localStorage.getItem("lastName"),
   username: localStorage.getItem("username"),
 
   login: async (userName, password) => {
@@ -39,10 +41,9 @@ export const useAuthStore = create<AuthState>((set) => ({
       }
 
       const data = await res.json();
-
       const token = data.access_token;
 
-      // Decode the JWT to extract the username
+      // Decode the JWT
       const payload = JSON.parse(atob(token.split(".")[1])) as {
         username?: string;
         sub?: string;
@@ -50,16 +51,18 @@ export const useAuthStore = create<AuthState>((set) => ({
 
       const username = payload.username || null;
 
+      const firstName = localStorage.getItem("firstName");
+      const lastName = localStorage.getItem("lastName");
+
       localStorage.setItem("token", token);
-      if (username) {
-        localStorage.setItem("username", username);
-      }
+      if (username) localStorage.setItem("username", username);
 
       set({
         token,
         isLoggedIn: true,
         error: null,
-        firstName: null,
+        firstName,
+        lastName,
         username,
       });
     } catch (error: any) {
@@ -86,6 +89,9 @@ export const useAuthStore = create<AuthState>((set) => ({
         throw new Error(rawText || "Registration failed");
       }
 
+      localStorage.setItem("firstName", firstName);
+      localStorage.setItem("lastName", lastName);
+
       set({ error: null });
     } catch (error: any) {
       set({ error: error.message || "Registration failed" });
@@ -95,12 +101,14 @@ export const useAuthStore = create<AuthState>((set) => ({
   logout: () => {
     localStorage.removeItem("token");
     localStorage.removeItem("firstName");
+    localStorage.removeItem("lastName");
     localStorage.removeItem("username");
     set({
       token: null,
       isLoggedIn: false,
       error: null,
       firstName: null,
+      lastName: null,
       username: null,
     });
   },

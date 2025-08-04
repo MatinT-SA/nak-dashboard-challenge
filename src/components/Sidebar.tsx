@@ -79,12 +79,20 @@ const Sidebar = () => {
   const logout = useAuthStore((state) => state.logout);
   const navigate = useNavigate();
 
+  const firstName = useAuthStore((state) => state.firstName);
+  const lastName = useAuthStore((state) => state.lastName);
+  const username = useAuthStore((state) => state.username);
+
   return (
     <SidebarWrapper>
       <div>
         <TopSection>
           <ProfileIcon size={50} />
-          <Name>Parnia Zandieh</Name>
+          <Name>
+            {firstName || lastName
+              ? `${firstName ?? ""} ${lastName ?? ""}`.trim()
+              : username || "User"}
+          </Name>
         </TopSection>
 
         <Nav>
