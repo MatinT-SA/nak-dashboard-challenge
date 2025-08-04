@@ -1,51 +1,51 @@
-import styled from '@emotion/styled';
-import type { ReactNode } from 'react';
+import styled from "@emotion/styled";
+import type { ReactNode } from "react";
 
 interface ButtonProps {
   children: ReactNode;
   onClick?: () => void;
-  type?: 'button' | 'submit' | 'reset';
+  type?: "button" | "submit" | "reset";
   disabled?: boolean;
-  variant?: 'primary' | 'secondary' | 'danger';
-  size?: 'small' | 'medium' | 'large';
+  variant?: "primary" | "secondary" | "danger";
+  size?: "small" | "medium" | "large";
 }
 
-const StyledButton = styled.button<{ 
-  variant: 'primary' | 'secondary' | 'danger';
-  size: 'small' | 'medium' | 'large';
+const StyledButton = styled.button<{
+  variant: "primary" | "secondary" | "danger";
+  size: "small" | "medium" | "large";
 }>`
   border: none;
-  border-radius: 8px;
+  border-radius: 10000px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  
-  ${props => {
+
+  ${(props) => {
     switch (props.size) {
-      case 'small':
+      case "small":
         return `
           padding: 0.5rem 1rem;
           font-size: 14px;
         `;
-      case 'large':
+      case "large":
         return `
           padding: 1rem 2rem;
           font-size: 18px;
         `;
       default:
         return `
-          padding: 0.75rem 1.5rem;
+          padding: 0.5rem 1.5rem;
           font-size: 16px;
         `;
     }
   }}
-  
-  ${props => {
+
+  ${(props) => {
     switch (props.variant) {
-      case 'primary':
+      case "primary":
         return `
           background: #1e1e2f;
           color: white;
@@ -55,7 +55,7 @@ const StyledButton = styled.button<{
             transform: translateY(-1px);
           }
         `;
-      case 'danger':
+      case "danger":
         return `
           background: #dc3545;
           color: white;
@@ -84,19 +84,19 @@ const StyledButton = styled.button<{
     cursor: not-allowed;
     transform: none;
   }
-  
+
   &:active {
     transform: translateY(0);
   }
 `;
 
-export const Button = ({ 
-  children, 
-  onClick, 
-  type = 'button', 
-  disabled = false, 
-  variant = 'secondary',
-  size = 'medium'
+export const Button = ({
+  children,
+  onClick,
+  type = "button",
+  disabled = false,
+  variant = "secondary",
+  size = "medium",
 }: ButtonProps) => (
   <StyledButton
     type={type}
@@ -109,10 +109,10 @@ export const Button = ({
   </StyledButton>
 );
 
-export const PrimaryButton = (props: Omit<ButtonProps, 'variant'>) => (
+export const PrimaryButton = (props: Omit<ButtonProps, "variant">) => (
   <Button {...props} variant="primary" />
 );
 
-export const DangerButton = (props: Omit<ButtonProps, 'variant'>) => (
+export const DangerButton = (props: Omit<ButtonProps, "variant">) => (
   <Button {...props} variant="danger" />
 );

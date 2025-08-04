@@ -20,6 +20,7 @@ import {
   InputsWrapper,
   ErrorMessage,
 } from "../components/FormElements";
+import { PlusIcon } from "../components/icons/PlusIcon";
 
 const Container = styled.div`
   background-color: transparent;
@@ -206,6 +207,7 @@ export default function Attributes() {
         </div>
         <PrimaryButton onClick={() => openModal()}>
           {t("pages.attributes.addAttribute")}
+          <PlusIcon style={{ marginLeft: 14, verticalAlign: "middle" }} />
         </PrimaryButton>
       </Header>
 
