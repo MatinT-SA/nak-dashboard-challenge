@@ -41,9 +41,10 @@ const InputWrapper = styled.div`
 const FloatingLabel = styled.label`
   position: absolute;
   top: -10px;
-  left: 12px;
-  background: white;
-  padding: 0 6px;
+  left: 30px;
+  background-color: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(4px);
+  padding: 0 4px;
   font-size: 0.8rem;
   color: #666;
   pointer-events: none;
@@ -53,8 +54,9 @@ const Input = styled.input`
   width: 100%;
   padding: 10px 15px;
   border-radius: 40px;
-  border: 1px solid #ccc;
+  border: 1px solid #00000066;
   font-size: 1rem;
+  background-color: #ffffff66;
 
   &:focus {
     outline: none;
@@ -67,8 +69,9 @@ const Input = styled.input`
 `;
 
 const PlusButton = styled.button`
-  background-color: #007bff;
-  border: none;
+  background-color: rgba(0, 0, 0, 0.02);
+  color: black;
+  border: 2px solid black;
   border-radius: 50%;
   width: 40px;
   height: 40px;
@@ -76,7 +79,6 @@ const PlusButton = styled.button`
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  color: white;
   flex-shrink: 0;
 
   &:hover {
