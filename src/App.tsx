@@ -6,6 +6,7 @@ import globalStyles from "./styles/global";
 import Attributes from "./pages/Attributes";
 import Dashboard from "./pages/Dashboard";
 import Products from "./pages/Products";
+import SKUs from "./pages/SKUs";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import { useAuthStore } from "./store/authStore";
@@ -37,6 +38,7 @@ function App() {
           {isLoggedIn && (
             <Route element={<Layout />}>
               <Route path="/" element={<Dashboard />} />
+              <Route path="/skus" element={<SKUs />} />
               <Route path="/attributes" element={<Attributes />} />
               <Route path="/products" element={<Products />} />
               <Route path="*" element={<Navigate to="/" />} />

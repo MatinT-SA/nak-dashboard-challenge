@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { useProductsStore } from '../store/productsStore';
 import { SearchInput } from '../components/SearchInput';
-import { Select } from '../components/Select';
 
 // Main container
 const ProductsContainer = styled.div`
@@ -15,57 +14,63 @@ const ProductsContainer = styled.div`
 `;
 
 const PageTitle = styled.h1`
-  font-size: 2rem;
-  font-weight: 600;
-  color: var(--color-text-dark);
-  margin-bottom: 2rem;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 2.5rem;
 `;
 
 // Filters section
 const FiltersSection = styled.div`
-  background: rgba(255, 255, 255, 0.6);
-  border-radius: 16px;
-  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 2rem;
   margin-bottom: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+`;
+
+const FiltersTitle = styled.h2`
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 1.5rem;
 `;
 
 const FiltersGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1rem;
-`;
-
-const FilterActions = styled.div`
-  display: flex;
-  gap: 1rem;
-  justify-content: flex-end;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+  align-items: end;
 `;
 
 const ActionButton = styled.button<{ variant?: 'primary' | 'secondary' }>`
-  padding: 10px 20px;
-  border-radius: 8px;
+  padding: 12px 24px;
+  border-radius: 12px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
   border: none;
   
   ${props => props.variant === 'primary' ? `
-    background: #3b82f6;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     
     &:hover {
-      background: #2563eb;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
     }
   ` : `
     background: white;
-    color: #374151;
-    border: 1px solid #d1d5db;
+    color: #4a5568;
+    border: 2px solid #e2e8f0;
     
     &:hover {
-      background: #f9fafb;
+      background: #f7fafc;
+      border-color: #cbd5e0;
     }
   `}
   
@@ -77,133 +82,169 @@ const ActionButton = styled.button<{ variant?: 'primary' | 'secondary' }>`
 
 // Products list section
 const ProductsSection = styled.div`
-  background: rgba(255, 255, 255, 0.6);
-  border-radius: 16px;
-  padding: 1.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
 `;
 
 const ProductsHeader = styled.div`
   display: flex;
-  justify-content: between;
+  justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 `;
 
 const SectionTitle = styled.h2`
-  font-size: 1.25rem;
+  font-size: 1.75rem;
   font-weight: 600;
-  color: var(--color-text-dark);
+  color: #2d3748;
 `;
 
-const ProductsTable = styled.div`
-  overflow-x: auto;
-`;
-
-const Table = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  background: white;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-`;
-
-const TableHeader = styled.thead`
-  background: #f8fafc;
-`;
-
-const TableRow = styled.tr`
-  &:not(:last-child) {
-    border-bottom: 1px solid #e5e7eb;
-  }
+const AddButton = styled.button`
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
   
   &:hover {
-    background: #f9fafb;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
   }
 `;
 
-const TableHeaderCell = styled.th`
-  padding: 12px 16px;
-  text-align: left;
+const ProductsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 2rem;
+`;
+
+const ProductCard = styled.div`
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  }
+`;
+
+const ProductName = styled.h3`
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin-bottom: 1rem;
+`;
+
+const SKUsContainer = styled.div`
+  margin-bottom: 1rem;
+`;
+
+const SKUsLabel = styled.div`
+  font-size: 12px;
   font-weight: 600;
-  color: #374151;
-  font-size: 14px;
+  color: #718096;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
 `;
 
-const TableCell = styled.td`
-  padding: 12px 16px;
-  color: #374151;
-  font-size: 14px;
+const SKUsList = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 `;
 
-const StatusBadge = styled.span<{ status: string }>`
+const SKUBadge = styled.span`
+  background: linear-gradient(135deg, #e6fffa 0%, #b2f5ea 100%);
+  color: #234e52;
   padding: 4px 8px;
   border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid #81e6d9;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+`;
+
+const AttributesContainer = styled.div`
+  margin-bottom: 1rem;
+`;
+
+const AttributesLabel = styled.div`
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
+  color: #718096;
   text-transform: uppercase;
-  
-  ${props => {
-    switch (props.status) {
-      case 'active':
-        return 'background: #dcfce7; color: #166534;';
-      case 'inactive':
-        return 'background: #fef3c7; color: #92400e;';
-      case 'out_of_stock':
-        return 'background: #fee2e2; color: #991b1b;';
-      default:
-        return 'background: #f3f4f6; color: #374151;';
-    }
-  }}
+  margin-bottom: 0.5rem;
+`;
+
+const AttributesList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+`;
+
+const AttributeItem = styled.div`
+  font-size: 12px;
+  color: #4a5568;
+`;
+
+const ProductId = styled.div`
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  background: #f7fafc;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  color: #718096;
+  margin-top: 1rem;
 `;
 
 const LoadingSpinner = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 2rem;
-  font-size: 14px;
-  color: #6b7280;
+  padding: 4rem;
+  font-size: 16px;
+  color: #718096;
 `;
 
 const EmptyState = styled.div`
   text-align: center;
-  padding: 3rem 1rem;
-  color: #6b7280;
+  padding: 4rem 2rem;
+  color: #718096;
+  
+  h3 {
+    margin-bottom: 1rem;
+    color: #4a5568;
+  }
 `;
 
 interface ProductFilters {
   search: string;
-  category: string;
-  brand: string;
-  status: string;
-  priceRange: string;
-  stockLevel: string;
 }
 
 export default function Products() {
   const { t } = useTranslation();
   const {
     products,
-    categories,
-    brands,
     loading,
     fetchProducts,
-    fetchCategories,
-    fetchBrands,
     setFilters,
     resetFilters,
+    filters,
   } = useProductsStore();
 
   const { register, handleSubmit, reset, watch } = useForm<ProductFilters>({
     defaultValues: {
       search: '',
-      category: '',
-      brand: '',
-      status: '',
-      priceRange: '',
-      stockLevel: '',
     },
   });
 
@@ -212,18 +253,13 @@ export default function Products() {
 
   useEffect(() => {
     fetchProducts();
-    fetchCategories();
-    fetchBrands();
-  }, [fetchProducts, fetchCategories, fetchBrands]);
+  }, [fetchProducts]);
 
   // Apply filters when form values change
   useEffect(() => {
     const delayedFilter = setTimeout(() => {
       setFilters({
         search: watchedValues.search,
-        category: watchedValues.category,
-        brand: watchedValues.brand,
-        status: watchedValues.status,
       });
     }, 300); // Debounce search
 
@@ -235,44 +271,22 @@ export default function Products() {
     resetFilters();
   };
 
-  const categoryOptions = [
-    { value: '', label: t('products.allCategories') },
-    ...categories.map(cat => ({ value: cat, label: cat })),
-  ];
-
-  const brandOptions = [
-    { value: '', label: t('products.allBrands') },
-    ...brands.map(brand => ({ value: brand, label: brand })),
-  ];
-
-  const statusOptions = [
-    { value: '', label: t('products.allStatuses') },
-    { value: 'active', label: t('products.active') },
-    { value: 'inactive', label: t('products.inactive') },
-    { value: 'out_of_stock', label: t('products.outOfStock') },
-  ];
-
-  const priceRangeOptions = [
-    { value: '', label: 'All Prices' },
-    { value: '0-50', label: '$0 - $50' },
-    { value: '50-100', label: '$50 - $100' },
-    { value: '100-500', label: '$100 - $500' },
-    { value: '500+', label: '$500+' },
-  ];
-
-  const stockLevelOptions = [
-    { value: '', label: 'All Stock Levels' },
-    { value: 'in-stock', label: 'In Stock' },
-    { value: 'low-stock', label: 'Low Stock (< 10)' },
-    { value: 'out-of-stock', label: 'Out of Stock' },
-  ];
+  // Filter products locally based on search
+  const filteredProducts = products.filter(product => {
+    if (!filters.search) return true;
+    const searchLower = filters.search.toLowerCase();
+    return product.name.toLowerCase().includes(searchLower) ||
+           product.id.toLowerCase().includes(searchLower) ||
+           product.skusIds.some(skuId => skuId.toLowerCase().includes(searchLower));
+  });
 
   return (
     <ProductsContainer>
       <PageTitle>{t('products.title')}</PageTitle>
       
-      {/* Filters Section - 6 Selectors as requested */}
+      {/* Filters Section */}
       <FiltersSection>
+        <FiltersTitle>Search Products</FiltersTitle>
         <form onSubmit={handleSubmit(() => {})}>
           <FiltersGrid>
             <SearchInput
@@ -280,93 +294,61 @@ export default function Products() {
               placeholder={t('products.searchProducts')}
             />
             
-            <Select
-              {...register('category')}
-              options={categoryOptions}
-              label={t('products.filterByCategory')}
-            />
-            
-            <Select
-              {...register('brand')}
-              options={brandOptions}
-              label={t('products.filterByBrand')}
-            />
-            
-            <Select
-              {...register('status')}
-              options={statusOptions}
-              label={t('products.filterByStatus')}
-            />
-            
-            <Select
-              {...register('priceRange')}
-              options={priceRangeOptions}
-              label="Price Range"
-            />
-            
-            <Select
-              {...register('stockLevel')}
-              options={stockLevelOptions}
-              label="Stock Level"
-            />
-          </FiltersGrid>
-          
-          <FilterActions>
             <ActionButton type="button" onClick={handleResetFilters}>
               {t('common.reset')}
             </ActionButton>
-          </FilterActions>
+          </FiltersGrid>
         </form>
       </FiltersSection>
 
-      {/* Products List - SKU List */}
+      {/* Products List */}
       <ProductsSection>
         <ProductsHeader>
-          <SectionTitle>{t('products.productList')}</SectionTitle>
+          <SectionTitle>{t('products.productList')} ({filteredProducts.length})</SectionTitle>
+          <AddButton>+ Add New Product</AddButton>
         </ProductsHeader>
 
         {loading ? (
           <LoadingSpinner>{t('common.loading')}</LoadingSpinner>
-        ) : products.length === 0 ? (
+        ) : filteredProducts.length === 0 ? (
           <EmptyState>
             <h3>{t('common.noResults')}</h3>
-            <p>Try adjusting your filters to see more products.</p>
+            <p>Try adjusting your search or add your first product.</p>
           </EmptyState>
         ) : (
-          <ProductsTable>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHeaderCell>{t('products.sku')}</TableHeaderCell>
-                  <TableHeaderCell>{t('products.name')}</TableHeaderCell>
-                  <TableHeaderCell>{t('products.category')}</TableHeaderCell>
-                  <TableHeaderCell>{t('products.brand')}</TableHeaderCell>
-                  <TableHeaderCell>{t('products.price')}</TableHeaderCell>
-                  <TableHeaderCell>{t('products.stock')}</TableHeaderCell>
-                  <TableHeaderCell>{t('products.status')}</TableHeaderCell>
-                </TableRow>
-              </TableHeader>
-              <tbody>
-                {products.map((product) => (
-                  <TableRow key={product.id}>
-                    <TableCell>
-                      <strong>{product.sku}</strong>
-                    </TableCell>
-                    <TableCell>{product.name}</TableCell>
-                    <TableCell>{product.category}</TableCell>
-                    <TableCell>{product.brand}</TableCell>
-                    <TableCell>${product.price.toFixed(2)}</TableCell>
-                    <TableCell>{product.stock}</TableCell>
-                    <TableCell>
-                      <StatusBadge status={product.status}>
-                        {t(`products.${product.status}`)}
-                      </StatusBadge>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </tbody>
-            </Table>
-          </ProductsTable>
+          <ProductsGrid>
+            {filteredProducts.map((product) => (
+              <ProductCard key={product.id}>
+                <ProductName>{product.name}</ProductName>
+                
+                {product.skusIds.length > 0 && (
+                  <SKUsContainer>
+                    <SKUsLabel>SKUs ({product.skusIds.length})</SKUsLabel>
+                    <SKUsList>
+                      {product.skusIds.map((skuId, index) => (
+                        <SKUBadge key={index}>{skuId}</SKUBadge>
+                      ))}
+                    </SKUsList>
+                  </SKUsContainer>
+                )}
+                
+                {product.attributes.length > 0 && (
+                  <AttributesContainer>
+                    <AttributesLabel>Attributes ({product.attributes.length})</AttributesLabel>
+                    <AttributesList>
+                      {product.attributes.map((attr, index) => (
+                        <AttributeItem key={index}>
+                          <strong>{attr.name}:</strong> {attr.values.join(', ')}
+                        </AttributeItem>
+                      ))}
+                    </AttributesList>
+                  </AttributesContainer>
+                )}
+                
+                <ProductId>ID: {product.id}</ProductId>
+              </ProductCard>
+            ))}
+          </ProductsGrid>
         )}
       </ProductsSection>
     </ProductsContainer>

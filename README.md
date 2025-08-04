@@ -1,16 +1,17 @@
 # NAK Dashboard Challenge
 
-A modern React dashboard application built for the NAK company job application challenge.
+A modern React dashboard application built for the NAK company job application challenge, featuring complete **SKU Management** system based on the actual API specification.
 
 ## 🚀 Features
 
+- **SKU Management**: Complete SKU listing and management with real-time filtering
+- **Products Management**: Product listing with SKU associations and attributes
+- **Attributes Management**: Comprehensive attribute management with name-value pairs
 - **Authentication System**: Complete sign-in and sign-up functionality
-- **Products Management**: Advanced product listing with 6-filter system and SKU management
-- **Attributes Management**: Comprehensive attribute management with 3-filter system
 - **Real-time Filtering**: Debounced search and instant filtering
 - **Network Monitoring**: Automatic network status detection with toast notifications
 - **Internationalization**: Full i18n support with react-i18next
-- **Responsive Design**: Modern UI with EmotionJS styling
+- **Modern UI Design**: Glass-morphism design with EmotionJS styling
 - **Type Safety**: Built with TypeScript for enhanced developer experience
 
 ## 🛠 Technical Stack
@@ -24,13 +25,39 @@ A modern React dashboard application built for the NAK company job application c
 - **Internationalization**: i18next and react-i18next
 - **Notifications**: React Hot Toast for user feedback
 
+## 🎯 Key Implementation Highlights
+
+### ✅ **SKU Management (Primary Focus)**
+Based on the actual NAK API specification:
+- **SKU Listing**: Complete SKU display with ID, Model, Price, and Stock
+- **Real-time Search**: Filter SKUs by model name or ID
+- **Stock Status**: Visual indicators (In Stock, Low Stock, Out of Stock)
+- **Price Filtering**: Filter by price ranges
+- **Stock Level Filtering**: Filter by stock availability
+
+### ✅ **Products Management**
+- **Product Cards**: Modern card-based layout showing product details
+- **SKU Associations**: Display linked SKUs for each product
+- **Attributes Display**: Show product attributes with name-value pairs
+- **Search Functionality**: Filter products by name, ID, or associated SKUs
+
+### ✅ **Attributes Management**
+- **Attribute Cards**: Clean card-based display of attributes
+- **Values Display**: Visual tags for attribute values
+- **Search Functionality**: Filter by attribute names or values
+
+### ✅ **API Integration**
+- **Real API Endpoints**: Integrated with actual NAK API at `https://nak-interview.darkube.app/api`
+- **Proper Authentication**: JWT token-based authentication
+- **Error Handling**: Graceful error handling with user feedback
+- **Loading States**: Proper loading indicators throughout
+
 ## 📁 Project Structure
 
 ```
 src/
 ├── components/         # Reusable UI components
 │   ├── icons/         # SVG icon components
-│   ├── FormElements.tsx
 │   ├── SearchInput.tsx
 │   ├── Select.tsx
 │   └── Sidebar.tsx
@@ -42,18 +69,19 @@ src/
 ├── layout/            # Layout components
 │   └── Layout.tsx
 ├── pages/             # Page components
-│   ├── Attributes.tsx
-│   ├── Dashboard.tsx
-│   ├── Products.tsx
+│   ├── Attributes.tsx # Attributes management
+│   ├── Dashboard.tsx  # Dashboard overview
+│   ├── Products.tsx   # Products with SKU associations
+│   ├── SKUs.tsx      # SKU management (Primary)
 │   ├── SignIn.tsx
 │   └── SignUp.tsx
-├── services/          # API services and mock data
-│   ├── api.ts
-│   └── mockData.ts
+├── services/          # API services
+│   └── api.ts        # NAK API integration
 ├── store/             # Zustand stores
 │   ├── authStore.ts
 │   ├── attributesStore.ts
-│   └── productsStore.ts
+│   ├── productsStore.ts
+│   └── skusStore.ts  # SKU management store
 ├── styles/            # Global styles
 │   └── global.ts
 └── App.tsx           # Main application component
@@ -82,73 +110,113 @@ src/
    npm run build
    ```
 
-5. **Preview production build**
-   ```bash
-   npm run preview
-   ```
-
-## 🎯 Key Requirements Implemented
-
-### Technical Requirements ✅
-- [x] **TypeScript**: Entire application built with TypeScript
-- [x] **EmotionJS**: All styling done exclusively with EmotionJS
-- [x] **Zustand**: State management implemented with Zustand
-- [x] **i18n**: No direct strings, all text content internationalized
-- [x] **Vite**: Project runs and builds with Vite
-- [x] **React Hook Form**: All forms implemented using react-hook-form
-
-### Business Requirements ✅
-- [x] **Authentication Flow**: Proper routing based on login status
-- [x] **Persistent Login**: User stays logged in after browser reload
-- [x] **Network Monitoring**: Continuous network status monitoring with toast notifications
-
-### Design Requirements ✅
-- [x] **Products Page**: 6 comprehensive filters (Search, Category, Brand, Status, Price Range, Stock Level)
-- [x] **Attributes Page**: 3 targeted filters (Search, Type, Required Status)
-- [x] **SKU List**: Complete product listing with all required columns
-- [x] **Modern UI**: Clean, professional design matching modern standards
-
 ## 🌐 API Integration
 
-The application is designed to work with the NAK Interview API at `https://nak-interview.darkube.app/api`. 
+The application is fully integrated with the NAK Interview API:
 
-**Development Mode**: Uses Vite proxy for CORS handling
-**Production Mode**: Direct API calls to the external endpoint
+**Base URL**: `https://nak-interview.darkube.app/api`
 
-**Fallback System**: When the API is unavailable, the application automatically falls back to mock data to demonstrate functionality.
+### Key Endpoints:
+- `GET /skus` - Fetch all SKUs
+- `POST /skus` - Create new SKU
+- `PATCH /skus/{id}` - Update SKU
+- `GET /products` - Fetch products (paginated)
+- `GET /attributes` - Fetch attributes
+- `POST /auth/login` - User authentication
+- `POST /users/register` - User registration
+
+### Authentication:
+- JWT Bearer token authentication
+- Persistent login state
+- Automatic token management
+
+## 🎨 Design Implementation
+
+### Glass-morphism UI:
+- **Backdrop blur effects** for modern appearance
+- **Gradient backgrounds** throughout the interface
+- **Rounded corners** and smooth transitions
+- **Card-based layouts** for better content organization
+
+### Professional Styling:
+- **Consistent color scheme** with gradient accents
+- **Typography hierarchy** for better readability
+- **Responsive design** that works on all screen sizes
+- **Interactive elements** with hover effects and animations
 
 ## 📱 Features Overview
 
-### Products Management
-- **Advanced Filtering**: 6-filter system including search, category, brand, status, price range, and stock level
-- **Real-time Search**: Debounced search with instant results
-- **SKU Display**: Comprehensive product information display
-- **Status Indicators**: Visual status badges for product states
-
-### Attributes Management  
-- **Type-based Filtering**: Filter by attribute types (text, number, boolean, date, dropdown)
-- **Required Status**: Filter by required/optional attributes
-- **Value Display**: Smart value rendering based on attribute type
+### SKU Management (Core Feature)
+- **Complete CRUD operations** via API
+- **Advanced filtering** by price range and stock level
+- **Real-time search** with debounced input
+- **Visual status indicators** for stock levels
+- **Professional table layout** with proper formatting
 
 ### User Experience
-- **Network Status**: Automatic detection and notification of connection issues
-- **Loading States**: Proper loading indicators throughout the application
-- **Error Handling**: Graceful error handling with user feedback
-- **Responsive Design**: Works seamlessly across different screen sizes
+- **Network Status Monitoring** with toast notifications
+- **Loading States** for all API operations
+- **Error Handling** with user-friendly messages
+- **Form Validation** using React Hook Form
+- **Internationalization** for global readiness
 
 ## 🚀 Deployment
 
 The application is ready for deployment on platforms like Vercel, Netlify, or any static hosting service.
 
-For Vercel deployment:
-1. Connect your GitHub repository to Vercel
-2. Vercel will automatically detect the Vite configuration
-3. The build command (`npm run build`) and output directory (`dist`) are pre-configured
+**Production Build**: Optimized and tested
+**API Integration**: Production-ready with proper error handling
+**Environment**: Automatically detects development vs production mode
 
-## 📄 License
+## 📊 API Schema Compliance
 
-This project is created for the NAK company job application challenge.
+The application strictly follows the NAK API schema:
+
+```typescript
+// SKU Interface (Primary Entity)
+interface SKU {
+  id: string;
+  model: string;
+  price: string;
+  numberInStock: string;
+  userId?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+// Product Interface
+interface Product {
+  id: string;
+  name: string;
+  skusIds: string[];
+  attributes: AttrDto[];
+  userId?: string;
+}
+
+// Attribute Interface
+interface Attribute {
+  id: string;
+  name: string;
+  values: string[];
+  userId?: string;
+}
+```
+
+## 📄 Technical Requirements Compliance
+
+### ✅ **All Technical Requirements Met:**
+- [x] **TypeScript**: Entire application built with TypeScript
+- [x] **EmotionJS**: All styling done exclusively with EmotionJS
+- [x] **Zustand**: State management implemented with Zustand
+- [x] **i18n**: Complete internationalization, no direct strings
+- [x] **Vite**: Project runs and builds with Vite
+- [x] **React Hook Form**: All forms implemented using react-hook-form
+
+### ✅ **All Business Requirements Met:**
+- [x] **Authentication Flow**: Proper routing based on login status
+- [x] **Persistent Login**: User stays logged in after browser reload
+- [x] **Network Monitoring**: Continuous network status monitoring with toast notifications
 
 ---
 
-**Built with ❤️ for NAK Company**
+**Built with ❤️ for NAK Company - Featuring Complete SKU Management System**

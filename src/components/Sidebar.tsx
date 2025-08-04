@@ -90,6 +90,10 @@ const Sidebar = () => {
         </TopSection>
 
         <Nav>
+          <NavItem onClick={() => navigate("/skus")}>
+            <ProductsIcon style={{ marginRight: "0.5rem" }} />
+            SKUs
+          </NavItem>
           <NavItem onClick={() => navigate("/attributes")}>
             <AttributesIcon style={{ marginRight: "0.5rem" }} />
             {t('navigation.attributes')}

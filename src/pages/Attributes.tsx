@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { useAttributesStore } from '../store/attributesStore';
 import { SearchInput } from '../components/SearchInput';
-import { Select } from '../components/Select';
 
 // Main container
 const AttributesContainer = styled.div`
@@ -15,57 +14,65 @@ const AttributesContainer = styled.div`
 `;
 
 const PageTitle = styled.h1`
-  font-size: 2rem;
-  font-weight: 600;
-  color: var(--color-text-dark);
-  margin-bottom: 2rem;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 2.5rem;
 `;
 
 // Filters section
 const FiltersSection = styled.div`
-  background: rgba(255, 255, 255, 0.6);
-  border-radius: 16px;
-  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 2rem;
   margin-bottom: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+`;
+
+const FiltersTitle = styled.h2`
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 1.5rem;
 `;
 
 const FiltersGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1rem;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+  align-items: end;
 `;
 
-const FilterActions = styled.div`
-  display: flex;
-  gap: 1rem;
-  justify-content: flex-end;
-`;
+
 
 const ActionButton = styled.button<{ variant?: 'primary' | 'secondary' }>`
-  padding: 10px 20px;
-  border-radius: 8px;
+  padding: 12px 24px;
+  border-radius: 12px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
   border: none;
   
   ${props => props.variant === 'primary' ? `
-    background: #3b82f6;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     
     &:hover {
-      background: #2563eb;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
     }
   ` : `
     background: white;
-    color: #374151;
-    border: 1px solid #d1d5db;
+    color: #4a5568;
+    border: 2px solid #e2e8f0;
     
     &:hover {
-      background: #f9fafb;
+      background: #f7fafc;
+      border-color: #cbd5e0;
     }
   `}
   
@@ -77,139 +84,134 @@ const ActionButton = styled.button<{ variant?: 'primary' | 'secondary' }>`
 
 // Attributes list section
 const AttributesSection = styled.div`
-  background: rgba(255, 255, 255, 0.6);
-  border-radius: 16px;
-  padding: 1.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
 `;
 
 const AttributesHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 `;
 
 const SectionTitle = styled.h2`
-  font-size: 1.25rem;
+  font-size: 1.75rem;
   font-weight: 600;
-  color: var(--color-text-dark);
+  color: #2d3748;
 `;
 
-const AttributesTable = styled.div`
-  overflow-x: auto;
-`;
-
-const Table = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  background: white;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-`;
-
-const TableHeader = styled.thead`
-  background: #f8fafc;
-`;
-
-const TableRow = styled.tr`
-  &:not(:last-child) {
-    border-bottom: 1px solid #e5e7eb;
-  }
+const AddButton = styled.button`
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
   
   &:hover {
-    background: #f9fafb;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
   }
 `;
 
-const TableHeaderCell = styled.th`
-  padding: 12px 16px;
-  text-align: left;
-  font-weight: 600;
-  color: #374151;
-  font-size: 14px;
+const AttributesGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2rem;
 `;
 
-const TableCell = styled.td`
-  padding: 12px 16px;
-  color: #374151;
-  font-size: 14px;
-`;
-
-const TypeBadge = styled.span<{ type: string }>`
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 500;
-  text-transform: uppercase;
+const AttributeCard = styled.div`
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
   
-  ${props => {
-    switch (props.type) {
-      case 'text':
-        return 'background: #dbeafe; color: #1e40af;';
-      case 'number':
-        return 'background: #dcfce7; color: #166534;';
-      case 'boolean':
-        return 'background: #fef3c7; color: #92400e;';
-      case 'date':
-        return 'background: #fce7f3; color: #be185d;';
-      case 'dropdown':
-        return 'background: #f3e8ff; color: #7c2d12;';
-      default:
-        return 'background: #f3f4f6; color: #374151;';
-    }
-  }}
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  }
+`;
+
+const AttributeName = styled.h3`
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin-bottom: 1rem;
+`;
+
+const ValuesContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+`;
+
+const ValueBadge = styled.span`
+  background: linear-gradient(135deg, #e6fffa 0%, #b2f5ea 100%);
+  color: #234e52;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid #81e6d9;
+`;
+
+const AttributeId = styled.div`
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  background: #f7fafc;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  color: #718096;
+  margin-top: 1rem;
 `;
 
 const LoadingSpinner = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 2rem;
-  font-size: 14px;
-  color: #6b7280;
+  padding: 4rem;
+  font-size: 16px;
+  color: #718096;
 `;
 
 const EmptyState = styled.div`
   text-align: center;
-  padding: 3rem 1rem;
-  color: #6b7280;
-`;
-
-const RequiredBadge = styled.span`
-  padding: 2px 6px;
-  border-radius: 8px;
-  font-size: 10px;
-  font-weight: 500;
-  background: #fee2e2;
-  color: #991b1b;
-  margin-left: 8px;
+  padding: 4rem 2rem;
+  color: #718096;
+  
+  h3 {
+    margin-bottom: 1rem;
+    color: #4a5568;
+  }
 `;
 
 interface AttributeFilters {
   search: string;
-  type: string;
-  required: string;
 }
 
 export default function Attributes() {
   const { t } = useTranslation();
   const {
     attributes,
-    types,
     loading,
     fetchAttributes,
-    fetchTypes,
     setFilters,
     resetFilters,
+    filters,
   } = useAttributesStore();
 
   const { register, handleSubmit, reset, watch } = useForm<AttributeFilters>({
     defaultValues: {
       search: '',
-      type: '',
-      required: '',
     },
   });
 
@@ -218,15 +220,13 @@ export default function Attributes() {
 
   useEffect(() => {
     fetchAttributes();
-    fetchTypes();
-  }, [fetchAttributes, fetchTypes]);
+  }, [fetchAttributes]);
 
   // Apply filters when form values change
   useEffect(() => {
     const delayedFilter = setTimeout(() => {
       setFilters({
         search: watchedValues.search,
-        type: watchedValues.type,
       });
     }, 300); // Debounce search
 
@@ -238,30 +238,21 @@ export default function Attributes() {
     resetFilters();
   };
 
-  const typeOptions = [
-    { value: '', label: t('attributes.allTypes') },
-    ...types.map(type => ({ value: type, label: t(`attributes.${type}`) })),
-  ];
-
-  const requiredOptions = [
-    { value: '', label: 'All Attributes' },
-    { value: 'true', label: 'Required Only' },
-    { value: 'false', label: 'Optional Only' },
-  ];
-
-  // Filter attributes locally based on the required filter since it's not in the store
+  // Filter attributes locally based on the search filter
   const filteredAttributes = attributes.filter(attr => {
-    if (watchedValues.required === '') return true;
-    const isRequired = attr.required;
-    return watchedValues.required === 'true' ? isRequired : !isRequired;
+    if (!filters.search) return true;
+    const searchLower = filters.search.toLowerCase();
+    return attr.name.toLowerCase().includes(searchLower) ||
+           attr.values.some(value => value.toLowerCase().includes(searchLower));
   });
 
   return (
     <AttributesContainer>
       <PageTitle>{t('attributes.title')}</PageTitle>
       
-      {/* Filters Section - 3 Selectors as requested */}
+      {/* Filters Section - Simplified for Attributes API */}
       <FiltersSection>
+        <FiltersTitle>Search Attributes</FiltersTitle>
         <form onSubmit={handleSubmit(() => {})}>
           <FiltersGrid>
             <SearchInput
@@ -269,31 +260,18 @@ export default function Attributes() {
               placeholder={t('attributes.searchAttributes')}
             />
             
-            <Select
-              {...register('type')}
-              options={typeOptions}
-              label={t('attributes.filterByType')}
-            />
-            
-            <Select
-              {...register('required')}
-              options={requiredOptions}
-              label="Required Status"
-            />
-          </FiltersGrid>
-          
-          <FilterActions>
             <ActionButton type="button" onClick={handleResetFilters}>
               {t('common.reset')}
             </ActionButton>
-          </FilterActions>
+          </FiltersGrid>
         </form>
       </FiltersSection>
 
       {/* Attributes List */}
       <AttributesSection>
         <AttributesHeader>
-          <SectionTitle>{t('attributes.attributeList')}</SectionTitle>
+          <SectionTitle>{t('attributes.attributeList')} ({filteredAttributes.length})</SectionTitle>
+          <AddButton>+ Add New Attribute</AddButton>
         </AttributesHeader>
 
         {loading ? (
@@ -301,56 +279,22 @@ export default function Attributes() {
         ) : filteredAttributes.length === 0 ? (
           <EmptyState>
             <h3>{t('common.noResults')}</h3>
-            <p>Try adjusting your filters to see more attributes.</p>
+            <p>Try adjusting your search or add your first attribute.</p>
           </EmptyState>
         ) : (
-          <AttributesTable>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHeaderCell>{t('attributes.name')}</TableHeaderCell>
-                  <TableHeaderCell>{t('attributes.type')}</TableHeaderCell>
-                  <TableHeaderCell>{t('attributes.value')}</TableHeaderCell>
-                  <TableHeaderCell>Required</TableHeaderCell>
-                  <TableHeaderCell>Created</TableHeaderCell>
-                </TableRow>
-              </TableHeader>
-              <tbody>
-                {filteredAttributes.map((attribute) => (
-                  <TableRow key={attribute.id}>
-                    <TableCell>
-                      <strong>{attribute.name}</strong>
-                      {attribute.required && <RequiredBadge>Required</RequiredBadge>}
-                    </TableCell>
-                    <TableCell>
-                      <TypeBadge type={attribute.type}>
-                        {t(`attributes.${attribute.type}`)}
-                      </TypeBadge>
-                    </TableCell>
-                    <TableCell>
-                      {attribute.type === 'dropdown' && attribute.options ? (
-                        <span>{attribute.options.join(', ')}</span>
-                      ) : attribute.value ? (
-                        <span>{String(attribute.value)}</span>
-                      ) : (
-                        <span style={{ color: '#9ca3af' }}>—</span>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {attribute.required ? (
-                        <span style={{ color: '#dc2626' }}>Yes</span>
-                      ) : (
-                        <span style={{ color: '#6b7280' }}>No</span>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {new Date(attribute.createdAt).toLocaleDateString()}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </tbody>
-            </Table>
-          </AttributesTable>
+          <AttributesGrid>
+            {filteredAttributes.map((attribute) => (
+              <AttributeCard key={attribute.id}>
+                <AttributeName>{attribute.name}</AttributeName>
+                <ValuesContainer>
+                  {attribute.values.map((value, index) => (
+                    <ValueBadge key={index}>{value}</ValueBadge>
+                  ))}
+                </ValuesContainer>
+                <AttributeId>ID: {attribute.id}</AttributeId>
+              </AttributeCard>
+            ))}
+          </AttributesGrid>
         )}
       </AttributesSection>
     </AttributesContainer>
