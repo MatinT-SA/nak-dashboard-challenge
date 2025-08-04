@@ -21,8 +21,9 @@ type DynamicFormProps = {
 
 const Form = styled.form`
   width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
+  max-width: 1000px;
+  margin-left: 0;
+  margin-right: auto;
   padding: 1rem;
 `;
 
@@ -40,21 +41,23 @@ const InputWrapper = styled.div`
 
 const FloatingLabel = styled.label`
   position: absolute;
-  top: -10px;
-  left: 30px;
+  top: -1rem;
+  left: 6rem;
   background-color: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(4px);
-  padding: 0 4px;
-  font-size: 0.8rem;
+  backdrop-filter: blur(10px);
+  border-radius: 40px;
+  padding: 0.2rem 1rem;
+  font-size: 20px;
+  font-weight: 600;
   color: #666;
   pointer-events: none;
 `;
 
 const Input = styled.input`
   width: 100%;
-  padding: 10px 15px;
+  padding: 14px 20px;
   border-radius: 40px;
-  border: 1px solid #00000066;
+  border: 2px solid #00000066;
   font-size: 1rem;
   background-color: #ffffff66;
 
@@ -126,10 +129,27 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   control,
   errors,
 }) => {
+  // Initially one full row: name & value empty
   const [fields, setFields] = useState<Field[]>([{ name: "", value: "" }]);
 
   const addField = () => {
-    setFields([...fields, { name: "", value: "" }]);
+    const updated = [...fields];
+
+    // Check if last field is partial: name empty, value filled or empty?
+    const lastField = updated[updated.length - 1];
+    const isPartial = lastField.name === "" && lastField.value !== "";
+
+    if (isPartial) {
+      // Expand partial row to full row (show name & value)
+      updated[updated.length - 1] = { name: "", value: lastField.value };
+      // Add new partial row (only value field)
+      updated.push({ name: "", value: "" });
+    } else {
+      // Add partial row if last is full row
+      updated.push({ name: "", value: "" });
+    }
+
+    setFields(updated);
   };
 
   const handleChange = (
@@ -144,46 +164,58 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    onSave(fields);
+    // Filter out partial rows with empty name and empty value (optional)
+    const filtered = fields.filter((f) => !(f.name === "" && f.value === ""));
+    onSave(filtered);
   };
 
   return (
     <Form onSubmit={handleSubmit}>
-      {fields.map((field, i) => (
-        <Row key={i}>
-          <InputWrapper>
-            <FloatingLabel htmlFor={`name-${i}`}>Name</FloatingLabel>
-            <Input
-              id={`name-${i}`}
-              type="text"
-              value={field.name}
-              onChange={(e) => handleChange(i, "name", e)}
-              placeholder=" "
-            />
-          </InputWrapper>
+      {fields.map((field, i) => {
+        const isFirstRow = i === 0;
+        const isLastRow = i === fields.length - 1;
+        const isPartial = field.name === "" && field.value !== "";
 
-          <InputWrapper>
-            <FloatingLabel htmlFor={`value-${i}`}>Value</FloatingLabel>
-            <Input
-              id={`value-${i}`}
-              type="text"
-              value={field.value}
-              onChange={(e) => handleChange(i, "value", e)}
-              placeholder=" "
-            />
-          </InputWrapper>
+        return (
+          <Row key={i}>
+            {/* Show name input only if not partial */}
+            {!isPartial && (
+              <InputWrapper>
+                <FloatingLabel htmlFor={`name-${i}`}>Name</FloatingLabel>
+                <Input
+                  id={`name-${i}`}
+                  type="text"
+                  value={field.name}
+                  onChange={(e) => handleChange(i, "name", e)}
+                  placeholder=" "
+                />
+              </InputWrapper>
+            )}
 
-          {i === fields.length - 1 && (
-            <PlusButton
-              type="button"
-              aria-label="Add new field"
-              onClick={addField}
-            >
-              <PlusIcon />
-            </PlusButton>
-          )}
-        </Row>
-      ))}
+            <InputWrapper>
+              <FloatingLabel htmlFor={`value-${i}`}>Value</FloatingLabel>
+              <Input
+                id={`value-${i}`}
+                type="text"
+                value={field.value}
+                onChange={(e) => handleChange(i, "value", e)}
+                placeholder=" "
+              />
+            </InputWrapper>
+
+            {/* Plus button only on rows after first, and only on last row */}
+            {!isFirstRow && isLastRow && (
+              <PlusButton
+                type="button"
+                aria-label="Add new field"
+                onClick={addField}
+              >
+                <PlusIcon />
+              </PlusButton>
+            )}
+          </Row>
+        );
+      })}
 
       <ButtonsRow>
         <CancelButton type="button" onClick={onCancel}>
