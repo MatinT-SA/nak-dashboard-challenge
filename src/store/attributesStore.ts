@@ -24,7 +24,7 @@ interface AttributesState {
 
 export const useAttributesStore = create<AttributesState>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       attributes: [],
       isLoading: false,
       error: null,

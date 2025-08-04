@@ -89,30 +89,19 @@ const PlusButton = styled.button`
   }
 `;
 
-const DynamicForm: React.FC<DynamicFormProps> = ({
-  onCancel,
-  onSave,
-  register,
-  control,
-  errors,
-}) => {
-  // Initially one full row: name & value empty
+const DynamicForm: React.FC<DynamicFormProps> = ({ onSave }) => {
   const [fields, setFields] = useState<Field[]>([{ name: "", value: "" }]);
 
   const addField = () => {
     const updated = [...fields];
 
-    // Check if last field is partial: name empty, value filled or empty?
     const lastField = updated[updated.length - 1];
     const isPartial = lastField.name === "" && lastField.value !== "";
 
     if (isPartial) {
-      // Expand partial row to full row (show name & value)
       updated[updated.length - 1] = { name: "", value: lastField.value };
-      // Add new partial row (only value field)
       updated.push({ name: "", value: "" });
     } else {
-      // Add partial row if last is full row
       updated.push({ name: "", value: "" });
     }
 
@@ -131,7 +120,6 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    // Filter out partial rows with empty name and empty value (optional)
     const filtered = fields.filter((f) => !(f.name === "" && f.value === ""));
     onSave(filtered);
   };
@@ -145,7 +133,6 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
 
         return (
           <Row key={i}>
-            {/* Show name input only if not partial */}
             {!isPartial && (
               <InputWrapper>
                 <FloatingLabel htmlFor={`name-${i}`}>Name</FloatingLabel>

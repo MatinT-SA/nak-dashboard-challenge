@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 interface ButtonProps {
   children: ReactNode;
@@ -8,6 +8,7 @@ interface ButtonProps {
   disabled?: boolean;
   variant?: "primary" | "secondary" | "danger";
   size?: "small" | "medium" | "large";
+  style?: CSSProperties;
 }
 
 const StyledButton = styled.button<{

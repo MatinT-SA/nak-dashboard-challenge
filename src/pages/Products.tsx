@@ -49,14 +49,6 @@ export default function Products() {
   const { t } = useTranslation();
   const { products } = useProductsStore();
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    setValue,
-    formState: { errors },
-  } = useForm<ProductFormData>();
-
   return (
     <Container>
       <Header>
