@@ -48,16 +48,13 @@ export const useAuthStore = create<AuthState>((set) => ({
       set({ error: null });
 
       const fullUrl = "/api/users/register";
-      console.log("1. Full request URL:", fullUrl);
 
-      // Changed userName to username here
       const body = JSON.stringify({
         firstName,
         lastName,
         userName,
         password,
       });
-      console.log("2. Request body:", body);
 
       const res = await fetch(fullUrl, {
         method: "POST",
@@ -65,10 +62,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         body,
       });
 
-      console.log("3. Status code:", res.status);
-
-      const rawText = await res.text(); // Use text to avoid JSON parse crash
-      console.log("4. Raw response text:", rawText);
+      const rawText = await res.text();
 
       if (!res.ok) {
         throw new Error(rawText || "Registration failed");
@@ -76,7 +70,6 @@ export const useAuthStore = create<AuthState>((set) => ({
 
       set({ error: null });
     } catch (error: any) {
-      console.log("5. Caught error:", error.message);
       set({ error: error.message || "Registration failed" });
     }
   },
