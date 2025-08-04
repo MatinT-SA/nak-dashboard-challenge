@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import styled from '@emotion/styled';
+import { useEffect, useState } from "react";
+import styled from "@emotion/styled";
 
 const ToastContainer = styled.div<{ show: boolean }>`
   position: fixed;
@@ -11,7 +11,7 @@ const ToastContainer = styled.div<{ show: boolean }>`
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   z-index: 9999;
-  transform: translateX(${props => props.show ? '0' : '400px'});
+  transform: translateX(${(props) => (props.show ? "0" : "400px")});
   transition: transform 0.3s ease-in-out;
   max-width: 350px;
 `;
@@ -41,21 +41,19 @@ export const NetworkMonitor = () => {
       setShowToast(true);
     };
 
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
 
-    // Show toast if already offline on mount
     if (!navigator.onLine) {
       setShowToast(true);
     }
 
     return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
     };
   }, []);
 
-  // Auto-hide toast when back online
   useEffect(() => {
     if (isOnline && showToast) {
       const timer = setTimeout(() => {

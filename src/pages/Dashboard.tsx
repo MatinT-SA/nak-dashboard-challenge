@@ -25,12 +25,11 @@ const Message = styled.p`
 `;
 
 export default function Dashboard() {
-  const firstName = useAuthStore((state) => state.firstName);
-  console.log(firstName);
+  const username = useAuthStore((state) => state.username);
 
   return (
     <Container>
-      <Heading>Hello, {firstName ?? "User"} 👋🏻</Heading>
+      <Heading>Hello, {username ?? "User"} 👋🏻</Heading>
       <Message>
         Im very happy you are here,
         <br /> I hope you find this dashboard easy and useful to use ☺️
