@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { useAuthStore } from "../store/authStore";
 
 const Container = styled.div`
   background-color: rgba(255, 255, 255, 0.4);
@@ -24,9 +25,12 @@ const Message = styled.p`
 `;
 
 export default function Dashboard() {
+  const firstName = useAuthStore((state) => state.firstName);
+  console.log(firstName);
+
   return (
     <Container>
-      <Heading>Hello, Parnia 👋🏻</Heading>
+      <Heading>Hello, {firstName ?? "User"} 👋🏻</Heading>
       <Message>
         Im very happy you are here,
         <br /> I hope you find this dashboard easy and useful to use ☺️

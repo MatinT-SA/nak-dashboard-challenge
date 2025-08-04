@@ -4,6 +4,7 @@ interface AuthState {
   token: string | null;
   isLoggedIn: boolean;
   error: string | null;
+  firstName: string | null;
   login: (userName: string, password: string) => Promise<void>;
   register: (
     firstName: string,
@@ -18,6 +19,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   token: localStorage.getItem("token"),
   isLoggedIn: !!localStorage.getItem("token"),
   error: null,
+  firstName: localStorage.getItem("firstName"),
 
   login: async (userName, password) => {
     try {
@@ -35,9 +37,19 @@ export const useAuthStore = create<AuthState>((set) => ({
 
       const data = await res.json();
       const token = data.access_token;
+      const user = data.user; // expecting { firstName, ... }
 
       localStorage.setItem("token", token);
-      set({ token, isLoggedIn: true, error: null });
+      if (user?.firstName) {
+        localStorage.setItem("firstName", user.firstName);
+      }
+
+      set({
+        token,
+        isLoggedIn: true,
+        error: null,
+        firstName: user?.firstName || null,
+      });
     } catch (error: any) {
       set({ error: error.message || "Login failed" });
     }
@@ -48,7 +60,6 @@ export const useAuthStore = create<AuthState>((set) => ({
       set({ error: null });
 
       const fullUrl = "/api/users/register";
-
       const body = JSON.stringify({
         firstName,
         lastName,
@@ -76,6 +87,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   logout: () => {
     localStorage.removeItem("token");
-    set({ token: null, isLoggedIn: false, error: null });
+    localStorage.removeItem("firstName");
+    set({ token: null, isLoggedIn: false, error: null, firstName: null });
   },
 }));
