@@ -49,7 +49,6 @@ export default function SignIn() {
   const { t } = useTranslation();
   const login = useAuthStore((state) => state.login);
   const error = useAuthStore((state) => state.error);
-  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const navigate = useNavigate();
 
   const {

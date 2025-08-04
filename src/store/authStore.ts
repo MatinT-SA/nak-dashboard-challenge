@@ -14,6 +14,8 @@ interface AuthState {
   logout: () => void;
 }
 
+const API_BASE_URL = 'https://nak-interview.darkube.app/api';
+
 export const useAuthStore = create<AuthState>((set) => ({
   token: localStorage.getItem("token"),
   isLoggedIn: !!localStorage.getItem("token"),
@@ -22,7 +24,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   login: async (userName, password) => {
     try {
       set({ error: null });
-      const res = await fetch("/api/auth/login", {
+      const res = await fetch(`${API_BASE_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userName, password }),
@@ -47,7 +49,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     try {
       set({ error: null });
 
-      const fullUrl = "/api/users/register";
+      const fullUrl = `${API_BASE_URL}/users/register`;
       console.log("1. Full request URL:", fullUrl);
 
       // Changed userName to username here

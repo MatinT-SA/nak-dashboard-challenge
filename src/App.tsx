@@ -10,9 +10,13 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import { useAuthStore } from "./store/authStore";
 import Layout from "./layout/Layout";
+import { useNetworkStatus } from "./hooks/useNetworkStatus";
 
 function App() {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  
+  // Monitor network status globally
+  useNetworkStatus();
 
   return (
     <>

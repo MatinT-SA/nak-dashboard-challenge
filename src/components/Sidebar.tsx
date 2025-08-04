@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { useTranslation } from "react-i18next";
 import ProfileIcon from "./icons/ProfileIcon";
 import AttributesIcon from "./icons/AttributesIcon";
 import ProductsIcon from "./icons/ProductsIcon";
@@ -76,6 +77,7 @@ const LogoutButton = styled.button`
 `;
 
 const Sidebar = () => {
+  const { t } = useTranslation();
   const logout = useAuthStore((state) => state.logout);
   const navigate = useNavigate();
 
@@ -90,18 +92,18 @@ const Sidebar = () => {
         <Nav>
           <NavItem onClick={() => navigate("/attributes")}>
             <AttributesIcon style={{ marginRight: "0.5rem" }} />
-            Attributes
+            {t('navigation.attributes')}
           </NavItem>
           <NavItem onClick={() => navigate("/products")}>
             <ProductsIcon style={{ marginRight: "0.5rem" }} />
-            products
+            {t('navigation.products')}
           </NavItem>
         </Nav>
       </div>
 
       <LogoutButton onClick={() => logout()}>
         <LogoutIcon style={{ marginRight: "0.5rem" }} />
-        Logout
+        {t('navigation.logout')}
       </LogoutButton>
     </SidebarWrapper>
   );
