@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import type { ChangeEvent, FormEvent } from "react";
+import type { ChangeEvent } from "react";
 import React, { useState } from "react";
 import { PlusIcon } from "./icons/PlusIcon";
 

@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { PrimaryButton } from "../components/Button";
 import {
@@ -35,15 +34,6 @@ const Title = styled.h1`
   margin: 0;
   color: black;
 `;
-
-interface ProductFormData {
-  name: string;
-  sku: string;
-  price: number;
-  category: string;
-  status: "active" | "inactive";
-  attributes?: { [key: string]: any };
-}
 
 export default function Products() {
   const { t } = useTranslation();
