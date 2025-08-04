@@ -1,17 +1,28 @@
-import { useState } from 'react';
-import styled from '@emotion/styled';
-import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import { useAttributesStore } from '../store/attributesStore';
-import type { Attribute } from '../store/attributesStore';
-import { Modal } from '../components/Modal';
-import { Table, TableHeader, TableBody, TableRow, TableCell, TableHeaderCell } from '../components/Table';
-import { Button, PrimaryButton, DangerButton } from '../components/Button';
-import { Select } from '../components/Select';
-import { StyledInput, InputsWrapper, ErrorMessage } from '../components/FormElements';
+import { useState } from "react";
+import styled from "@emotion/styled";
+import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { useAttributesStore } from "../store/attributesStore";
+import type { Attribute } from "../store/attributesStore";
+import { Modal } from "../components/Modal";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableCell,
+  TableHeaderCell,
+} from "../components/Table";
+import { Button, PrimaryButton, DangerButton } from "../components/Button";
+import { Select } from "../components/Select";
+import {
+  StyledInput,
+  InputsWrapper,
+  ErrorMessage,
+} from "../components/FormElements";
 
 const Container = styled.div`
-  background-color: rgba(255, 255, 255, 0.4);
+  background-color: transparent;
   padding: 2rem;
   border-radius: 7px;
   color: #000433;
@@ -32,12 +43,6 @@ const Title = styled.h1`
   font-weight: 800;
   margin: 0;
   color: black;
-`;
-
-const Description = styled.p`
-  font-size: 16px;
-  color: #666;
-  margin: 0.5rem 0 0 0;
 `;
 
 const ActionsCell = styled.div`
@@ -76,7 +81,7 @@ const RemoveValueButton = styled.button`
   padding: 0.25rem 0.5rem;
   cursor: pointer;
   font-size: 12px;
-  
+
   &:hover {
     background: #c82333;
   }
@@ -91,7 +96,7 @@ const AddValueButton = styled.button`
   cursor: pointer;
   font-size: 14px;
   margin-top: 0.5rem;
-  
+
   &:hover {
     background: #218838;
   }
@@ -106,31 +111,41 @@ const ModalActions = styled.div`
 
 interface AttributeFormData {
   name: string;
-  type: 'text' | 'number' | 'select' | 'boolean';
+  type: "text" | "number" | "select" | "boolean";
   values?: string[];
 }
 
 export default function Attributes() {
   const { t } = useTranslation();
-  const { attributes, addAttribute, updateAttribute, deleteAttribute } = useAttributesStore();
+  const { attributes, addAttribute, updateAttribute, deleteAttribute } =
+    useAttributesStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingAttribute, setEditingAttribute] = useState<Attribute | null>(null);
+  const [editingAttribute, setEditingAttribute] = useState<Attribute | null>(
+    null
+  );
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
-  const [values, setValues] = useState<string[]>(['']);
+  const [values, setValues] = useState<string[]>([""]);
 
-  const { register, handleSubmit, reset, watch, setValue, formState: { errors } } = useForm<AttributeFormData>();
-  const selectedType = watch('type');
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    setValue,
+    formState: { errors },
+  } = useForm<AttributeFormData>();
+  const selectedType = watch("type");
 
   const openModal = (attribute?: Attribute) => {
     if (attribute) {
       setEditingAttribute(attribute);
-      setValue('name', attribute.name);
-      setValue('type', attribute.type);
-      setValues(attribute.values || ['']);
+      setValue("name", attribute.name);
+      setValue("type", attribute.type);
+      setValues(attribute.values || [""]);
     } else {
       setEditingAttribute(null);
       reset();
-      setValues(['']);
+      setValues([""]);
     }
     setIsModalOpen(true);
   };
@@ -139,13 +154,14 @@ export default function Attributes() {
     setIsModalOpen(false);
     setEditingAttribute(null);
     reset();
-    setValues(['']);
+    setValues([""]);
   };
 
   const onSubmit = (data: AttributeFormData) => {
     const attributeData = {
       ...data,
-      values: selectedType === 'select' ? values.filter(v => v.trim()) : undefined
+      values:
+        selectedType === "select" ? values.filter((v) => v.trim()) : undefined,
     };
 
     if (editingAttribute) {
@@ -162,7 +178,7 @@ export default function Attributes() {
   };
 
   const addValue = () => {
-    setValues([...values, '']);
+    setValues([...values, ""]);
   };
 
   const removeValue = (index: number) => {
@@ -176,60 +192,51 @@ export default function Attributes() {
   };
 
   const typeOptions = [
-    { value: 'text', label: 'Text' },
-    { value: 'number', label: 'Number' },
-    { value: 'select', label: 'Select' },
-    { value: 'boolean', label: 'Boolean' }
+    { value: "text", label: "Text" },
+    { value: "number", label: "Number" },
+    { value: "select", label: "Select" },
+    { value: "boolean", label: "Boolean" },
   ];
 
   return (
     <Container>
       <Header>
         <div>
-          <Title>{t('pages.attributes.title')}</Title>
-          <Description>{t('pages.attributes.description')}</Description>
+          <Title>{t("pages.attributes.title")}</Title>
         </div>
         <PrimaryButton onClick={() => openModal()}>
-          {t('pages.attributes.addAttribute')}
+          {t("pages.attributes.addAttribute")}
         </PrimaryButton>
       </Header>
 
       <Table>
         <TableHeader>
-          <TableHeaderCell>{t('pages.attributes.name')}</TableHeaderCell>
-          <TableHeaderCell>{t('pages.attributes.type')}</TableHeaderCell>
-          <TableHeaderCell>{t('pages.attributes.values')}</TableHeaderCell>
-          <TableHeaderCell width="150px" align="center">{t('pages.attributes.actions')}</TableHeaderCell>
+          <TableHeaderCell width="40px" align="center">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          </TableHeaderCell>
+          <TableHeaderCell>{t("pages.attributes.name")}</TableHeaderCell>
+          <TableHeaderCell>{t("pages.attributes.values")}</TableHeaderCell>
         </TableHeader>
         <TableBody>
           {attributes.length === 0 ? (
             <TableRow>
-              <TableCell align="center" style={{ gridColumn: '1 / -1', padding: '2rem' }}>
-                {t('pages.attributes.noAttributes')}
+              <TableCell
+                align="center"
+                style={{ gridColumn: "1 / -1", padding: "2rem" }}
+              >
+                {t("pages.attributes.noAttributes")}
               </TableCell>
             </TableRow>
           ) : (
-            attributes.map((attribute) => (
+            attributes.map((attribute, index) => (
               <TableRow key={attribute.id}>
+                {/* Number column */}
+                <TableCell align="center">{index + 1}</TableCell>
+
                 <TableCell>{attribute.name}</TableCell>
                 <TableCell>
-                  {attribute.type.charAt(0).toUpperCase() + attribute.type.slice(1)}
-                </TableCell>
-                <TableCell>
-                  {attribute.type === 'select' && attribute.values
-                    ? attribute.values.join(', ')
-                    : '-'
-                  }
-                </TableCell>
-                <TableCell align="center">
-                  <ActionsCell>
-                    <Button size="small" onClick={() => openModal(attribute)}>
-                      {t('common.edit')}
-                    </Button>
-                    <DangerButton size="small" onClick={() => setDeleteConfirmId(attribute.id)}>
-                      {t('common.delete')}
-                    </DangerButton>
-                  </ActionsCell>
+                  {attribute.type.charAt(0).toUpperCase() +
+                    attribute.type.slice(1)}
                 </TableCell>
               </TableRow>
             ))
@@ -241,33 +248,41 @@ export default function Attributes() {
       <Modal
         isOpen={isModalOpen}
         onClose={closeModal}
-        title={editingAttribute ? t('pages.attributes.editAttribute') : t('pages.attributes.addAttribute')}
+        title={
+          editingAttribute
+            ? t("pages.attributes.editAttribute")
+            : t("pages.attributes.addAttribute")
+        }
         maxWidth="600px"
       >
         <form onSubmit={handleSubmit(onSubmit)}>
           <InputsWrapper>
             <FormGroup>
-              <Label>{t('pages.attributes.name')}</Label>
+              <Label>{t("pages.attributes.name")}</Label>
               <StyledInput
-                {...register('name', { required: t('forms.required') })}
-                placeholder={t('pages.attributes.name')}
+                {...register("name", { required: t("forms.required") })}
+                placeholder={t("pages.attributes.name")}
               />
-              {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
+              {errors.name && (
+                <ErrorMessage>{errors.name.message}</ErrorMessage>
+              )}
             </FormGroup>
 
             <FormGroup>
-              <Label>{t('pages.attributes.type')}</Label>
+              <Label>{t("pages.attributes.type")}</Label>
               <Select
-                {...register('type', { required: t('forms.required') })}
+                {...register("type", { required: t("forms.required") })}
                 options={typeOptions}
-                placeholder={t('pages.attributes.type')}
+                placeholder={t("pages.attributes.type")}
               />
-              {errors.type && <ErrorMessage>{errors.type.message}</ErrorMessage>}
+              {errors.type && (
+                <ErrorMessage>{errors.type.message}</ErrorMessage>
+              )}
             </FormGroup>
 
-            {selectedType === 'select' && (
+            {selectedType === "select" && (
               <FormGroup>
-                <Label>{t('pages.attributes.values')}</Label>
+                <Label>{t("pages.attributes.values")}</Label>
                 <ValuesContainer>
                   {values.map((value, index) => (
                     <ValueRow key={index}>
@@ -296,10 +311,12 @@ export default function Attributes() {
 
           <ModalActions>
             <Button type="button" onClick={closeModal}>
-              {t('common.cancel')}
+              {t("common.cancel")}
             </Button>
             <PrimaryButton type="submit">
-              {editingAttribute ? t('pages.attributes.update') : t('pages.attributes.create')}
+              {editingAttribute
+                ? t("pages.attributes.update")
+                : t("pages.attributes.create")}
             </PrimaryButton>
           </ModalActions>
         </form>
@@ -309,15 +326,19 @@ export default function Attributes() {
       <Modal
         isOpen={!!deleteConfirmId}
         onClose={() => setDeleteConfirmId(null)}
-        title={t('pages.attributes.deleteAttribute')}
+        title={t("pages.attributes.deleteAttribute")}
       >
-        <p>{t('pages.attributes.deleteConfirmation')}</p>
+        <p>{t("pages.attributes.deleteConfirmation")}</p>
         <ModalActions>
           <Button onClick={() => setDeleteConfirmId(null)}>
-            {t('common.cancel')}
+            {t("common.cancel")}
           </Button>
-          <DangerButton onClick={() => deleteConfirmId && handleDeleteConfirm(deleteConfirmId)}>
-            {t('pages.attributes.confirm')}
+          <DangerButton
+            onClick={() =>
+              deleteConfirmId && handleDeleteConfirm(deleteConfirmId)
+            }
+          >
+            {t("pages.attributes.confirm")}
           </DangerButton>
         </ModalActions>
       </Modal>
