@@ -1,0 +1,62 @@
+{
+  "pages": {
+    "attributes": {
+      "title": "Attributes",
+      "description": "Manage product attributes",
+      "addAttribute": "Add Attribute",
+      "editAttribute": "Edit Attribute",
+      "deleteAttribute": "Delete Attribute",
+      "name": "Name",
+      "type": "Type",
+      "values": "Values",
+      "actions": "Actions",
+      "create": "Create",
+      "update": "Update",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "deleteConfirmation": "Are you sure you want to delete this attribute?",
+      "noAttributes": "No attributes found"
+    },
+    "products": {
+      "title": "Products",
+      "description": "Manage your products",
+      "addProduct": "Add Product",
+      "editProduct": "Edit Product",
+      "deleteProduct": "Delete Product",
+      "name": "Product Name",
+      "price": "Price",
+      "category": "Category",
+      "description": "Description",
+      "image": "Image",
+      "status": "Status",
+      "actions": "Actions",
+      "create": "Create",
+      "update": "Update",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "deleteConfirmation": "Are you sure you want to delete this product?",
+      "noProducts": "No products found",
+      "active": "Active",
+      "inactive": "Inactive"
+    }
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "add": "Add",
+    "search": "Search",
+    "filter": "Filter",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Operation completed successfully"
+  },
+  "forms": {
+    "required": "This field is required",
+    "minLength": "Minimum length is {{count}} characters",
+    "maxLength": "Maximum length is {{count}} characters",
+    "email": "Please enter a valid email",
+    "number": "Please enter a valid number"
+  }
+}

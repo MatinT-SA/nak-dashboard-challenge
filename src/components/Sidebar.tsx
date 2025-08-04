@@ -94,7 +94,7 @@ const Sidebar = () => {
           </NavItem>
           <NavItem onClick={() => navigate("/products")}>
             <ProductsIcon style={{ marginRight: "0.5rem" }} />
-            products
+            Products
           </NavItem>
         </Nav>
       </div>

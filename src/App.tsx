@@ -10,6 +10,7 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import { useAuthStore } from "./store/authStore";
 import Layout from "./layout/Layout";
+import { NetworkMonitor } from "./components/NetworkMonitor";
 
 function App() {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
@@ -17,6 +18,7 @@ function App() {
   return (
     <>
       <Global styles={globalStyles} />
+      <NetworkMonitor />
 
       <BrowserRouter>
         <Routes>
