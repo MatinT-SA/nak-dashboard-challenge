@@ -55,7 +55,7 @@ const FloatingLabel = styled.label`
 
 const Input = styled.input`
   width: 100%;
-  padding: 14px 20px;
+  padding: 1rem 2rem;
   border-radius: 40px;
   border: 2px solid #00000066;
   font-size: 1rem;

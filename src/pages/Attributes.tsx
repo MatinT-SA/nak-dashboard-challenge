@@ -13,17 +13,23 @@ import {
   TableHeaderCell,
   TableRow,
 } from "../components/Table";
-import type { Attribute } from "../store/attributesStore";
 import { useAttributesStore } from "../store/attributesStore";
 
 const Container = styled.div`
+  display: flex;
+  flex-direction: column;
   background-color: transparent;
-  padding: 2rem;
+  padding: 2rem 2rem 0;
   border-radius: 7px;
   color: #000433;
   max-width: 1288px;
-  margin: 3rem 2rem;
-  height: auto;
+  margin: 3rem 2rem 0rem;
+  height: 80vh;
+`;
+
+const Content = styled.div`
+  flex: 1 1 auto;
+  overflow-y: auto; /* scroll if needed */
 `;
 
 const Header = styled.div`
@@ -41,16 +47,11 @@ const Title = styled.h1`
 `;
 
 const BottomBar = styled.div`
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  max-width: 1288px;
-  background: white;
+  background: transparent;
   padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: none;
   z-index: 10;
 `;
 
@@ -135,17 +136,30 @@ export default function Attributes() {
       )}
 
       {isFormActive && (
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <DynamicForm register={register} errors={errors} />
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          style={{ display: "flex", flexDirection: "column", height: "100%" }}
+        >
+          <Content>
+            <DynamicForm register={register} errors={errors} />
+          </Content>
           <BottomBar>
             <PrimaryButton
               type="button"
               onClick={onCancel}
-              style={{ backgroundColor: "#ccc", color: "#000" }}
+              style={{
+                backgroundColor: "#ccc",
+                color: "#000",
+                flex: 1,
+                marginRight: "1rem",
+                minWidth: "140px",
+              }}
             >
               {t("cancel")}
             </PrimaryButton>
-            <PrimaryButton type="submit">{t("save")}</PrimaryButton>
+            <PrimaryButton type="submit" style={{ flex: 1, minWidth: "140px" }}>
+              {t("save")}
+            </PrimaryButton>
           </BottomBar>
         </form>
       )}
