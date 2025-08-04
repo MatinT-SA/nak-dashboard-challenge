@@ -3,20 +3,9 @@ import type { ChangeEvent, FormEvent } from "react";
 import React, { useState } from "react";
 import { PlusIcon } from "./icons/PlusIcon";
 
-import type { Control, FieldErrors, UseFormRegister } from "react-hook-form";
-
 type Field = {
   name: string;
   value: string;
-};
-
-type DynamicFormProps = {
-  onCancel: () => void;
-  onSave: (fields: Field[]) => void;
-
-  register: UseFormRegister<Field>;
-  control: Control<Field>;
-  errors: FieldErrors<Field>;
 };
 
 const Form = styled.form`
@@ -89,12 +78,11 @@ const PlusButton = styled.button`
   }
 `;
 
-const DynamicForm: React.FC<DynamicFormProps> = ({ onSave }) => {
+const DynamicForm: React.FC = () => {
   const [fields, setFields] = useState<Field[]>([{ name: "", value: "" }]);
 
   const addField = () => {
     const updated = [...fields];
-
     const lastField = updated[updated.length - 1];
     const isPartial = lastField.name === "" && lastField.value !== "";
 
@@ -118,14 +106,10 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ onSave }) => {
     setFields(newFields);
   };
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    const filtered = fields.filter((f) => !(f.name === "" && f.value === ""));
-    onSave(filtered);
-  };
+  // no onSave or submit handler, just local form inputs
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form onSubmit={(e) => e.preventDefault()}>
       {fields.map((field, i) => {
         const isFirstRow = i === 0;
         const isLastRow = i === fields.length - 1;

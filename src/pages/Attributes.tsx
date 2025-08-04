@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { PrimaryButton } from "../components/Button";
 import DynamicForm from "../components/DynamicForm";
@@ -14,11 +13,6 @@ import {
   TableRow,
 } from "../components/Table";
 import { useAttributesStore } from "../store/attributesStore";
-
-interface Field {
-  name: string;
-  value: string;
-}
 
 const Container = styled.div`
   display: flex;
@@ -60,32 +54,11 @@ const BottomBar = styled.div`
   z-index: 10;
 `;
 
-interface AttributeFormData {
-  name: string;
-  type: "text" | "number" | "select" | "boolean";
-  values?: string[];
-}
-
 export default function Attributes() {
   const { t } = useTranslation();
-  const {
-    attributes,
-    isLoading,
-    error,
-    fetchAttributes,
-    createAttribute,
-    clearError,
-  } = useAttributesStore();
+  const { attributes, isLoading, fetchAttributes } = useAttributesStore();
 
   const [isFormActive, setIsFormActive] = useState(false);
-
-  const {
-    register,
-    handleSubmit,
-    reset,
-    control,
-    formState: { errors },
-  } = useForm<AttributeFormData>();
 
   useEffect(() => {
     fetchAttributes();
@@ -93,25 +66,6 @@ export default function Attributes() {
 
   const onCancel = () => {
     setIsFormActive(false);
-    reset();
-  };
-
-  const onSubmit = async (fields: Field[]) => {
-    if (fields.length === 0) return;
-
-    const name = fields[0].name;
-    const values = fields
-      .filter((f) => f.value.trim() !== "")
-      .map((f) => f.value);
-
-    if (!name || values.length === 0) {
-      // handle validation error here (optional)
-      return;
-    }
-
-    await createAttribute({ name, values });
-    setIsFormActive(false);
-    reset();
   };
 
   return (
@@ -158,6 +112,7 @@ export default function Attributes() {
                 <TableRow key={attribute.id}>
                   <TableCell align="center">{index + 1}</TableCell>
                   <TableCell>{attribute.name}</TableCell>
+                  <TableCell>{attribute.values?.join(", ")}</TableCell>
                 </TableRow>
               ))
             )}
@@ -167,17 +122,12 @@ export default function Attributes() {
 
       {isFormActive && (
         <form
-          onSubmit={handleSubmit(onSubmit)}
           style={{ display: "flex", flexDirection: "column", height: "100%" }}
+          onSubmit={(e) => e.preventDefault()} // prevent default submit
         >
           <Content>
-            <DynamicForm
-              onCancel={onCancel}
-              onSave={onSubmit}
-              register={register}
-              control={control}
-              errors={errors}
-            />
+            {/* Removed onSave prop here */}
+            <DynamicForm />
           </Content>
           <BottomBar>
             <PrimaryButton
@@ -192,9 +142,6 @@ export default function Attributes() {
               }}
             >
               {t("cancel")}
-            </PrimaryButton>
-            <PrimaryButton type="submit" style={{ flex: 1, minWidth: "140px" }}>
-              {t("save")}
             </PrimaryButton>
           </BottomBar>
         </form>
